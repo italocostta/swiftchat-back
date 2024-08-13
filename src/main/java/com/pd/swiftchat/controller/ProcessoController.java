@@ -40,7 +40,11 @@ public class ProcessoController {
     @GetMapping("/{id}")
     public ResponseEntity<Processo> obterProcesso(@PathVariable Long id) {
         Optional<Processo> processo = processoRepository.findById(id);
-        return processo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (processo.isPresent()) {
+            return ResponseEntity.ok(processo.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -50,7 +54,13 @@ public class ProcessoController {
             Processo processo = processoExistente.get();
             processo.setNome(processoAtualizado.getNome());
             processo.setDescricao(processoAtualizado.getDescricao());
-            processo.setTipoProcesso(processoAtualizado.getTipoProcesso());
+            processo.setUsuario(processoAtualizado.getUsuario());
+            Optional<TipoProcesso> tipoProcesso = tipoProcessoRepository.findById(processoAtualizado.getTipoProcesso().getId());
+            if (tipoProcesso.isPresent()) {
+                processo.setTipoProcesso(tipoProcesso.get());
+            } else {
+                throw new RuntimeException("Tipo de Processo não encontrado");
+            }
             return ResponseEntity.ok(processoRepository.save(processo));
         } else {
             return ResponseEntity.notFound().build();
