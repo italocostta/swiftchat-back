@@ -1,5 +1,6 @@
 package com.pd.swiftchat.controller;
 
+import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.Processo;
 import com.pd.swiftchat.model.TipoProcesso;
 import com.pd.swiftchat.repository.ProcessoRepository;
@@ -33,7 +34,7 @@ public class ProcessoController {
             processo.setTipoProcesso(tipoProcesso.get());
             return processoRepository.save(processo);
         } else {
-            throw new RuntimeException("Tipo de Processo não encontrado");
+            throw new ResourceNotFoundException("Tipo de Processo não encontrado");
         }
     }
 
@@ -43,7 +44,7 @@ public class ProcessoController {
         if (processo.isPresent()) {
             return ResponseEntity.ok(processo.get());
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
         }
     }
 
@@ -59,11 +60,11 @@ public class ProcessoController {
             if (tipoProcesso.isPresent()) {
                 processo.setTipoProcesso(tipoProcesso.get());
             } else {
-                throw new RuntimeException("Tipo de Processo não encontrado");
+                throw new ResourceNotFoundException("Tipo de Processo não encontrado");
             }
             return ResponseEntity.ok(processoRepository.save(processo));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
         }
     }
 
@@ -73,7 +74,7 @@ public class ProcessoController {
             processoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
         }
     }
 }
