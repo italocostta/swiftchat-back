@@ -14,27 +14,31 @@ public class ProcessoService {
     @Autowired
     private ProcessoRepository processoRepository;
 
-    public List<Processo> getAllProcessos(){
+    public List<Processo> getAllProcessos() {
         return processoRepository.findAll();
     }
 
-    public Optional<Processo> getProcessoById(int id){
-        return processoRepository.findById((long) id);
+    public Optional<Processo> getProcessoById(Long id) {
+        return processoRepository.findById(id);
     }
 
-    public Processo createProcesso(Processo processo){
+    public Processo createProcesso(Processo processo) {
+        Optional<Processo> existingProcesso = processoRepository.findFirstByUsuario(processo.getUsuario());
+        if (existingProcesso.isPresent()) {
+            throw new RuntimeException("O usuário já possui um processo. Aguarde o deferimento ou indeferimento do mesmo.");
+        }
         return processoRepository.save(processo);
     }
 
-    public Processo updateProcesso(Long id, Processo processo){
+    public Processo updateProcesso(Long id, Processo processoAtualizado) {
         if (processoRepository.existsById(id)) {
-            processo.setId(id);
-            return processoRepository.save(processo);
+            processoAtualizado.setId(id);
+            return processoRepository.save(processoAtualizado);
         }
         return null;
     }
 
-    public void deleteProcesso(int id){
-        processoRepository.deleteById((long) id);
+    public void deleteProcesso(Long id) {
+        processoRepository.deleteById(id);
     }
 }

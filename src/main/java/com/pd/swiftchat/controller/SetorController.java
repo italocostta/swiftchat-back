@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/setores")
@@ -21,8 +22,13 @@ public class SetorController {
     }
 
     @PostMapping
-    public Setor criarSetor(@RequestBody Setor setor) {
-        return setorService.createSetor(setor);
+    public ResponseEntity<?> criarSetor(@RequestBody Setor setor) {
+        try {
+            Setor novoSetor = setorService.createSetor(setor);
+            return ResponseEntity.ok(novoSetor);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")

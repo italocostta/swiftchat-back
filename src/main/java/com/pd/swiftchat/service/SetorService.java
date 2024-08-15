@@ -1,5 +1,7 @@
 package com.pd.swiftchat.service;
 
+import com.pd.swiftchat.exception.SetorIdOuNomeObrigatorioException;
+import com.pd.swiftchat.exception.SetorJaExisteException;
 import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.TipoProcesso;
 import com.pd.swiftchat.repository.SetorRepository;
@@ -24,6 +26,16 @@ public class SetorService {
     }
 
     public Setor createSetor(Setor setor) {
+        if (setor.getId() == null || setor.getNome() == null || setor.getNome().isEmpty()) {
+            throw new SetorIdOuNomeObrigatorioException("ID e nome do setor são obrigatórios.");
+        }
+        if (setorRepository.existsById(setor.getId())) {
+            throw new SetorJaExisteException("O setor com o ID fornecido já existe.");
+        }
+        Optional<Setor> existingSetor = setorRepository.findByNome(setor.getNome());
+        if (existingSetor.isPresent()) {
+            throw new SetorJaExisteException("O setor com o nome fornecido já existe.");
+        }
         return setorRepository.save(setor);
     }
 
@@ -40,11 +52,11 @@ public class SetorService {
     }
 
     public Setor getSetorPorTipoProcesso(TipoProcesso tipoProcesso) {
-
+        // Exemplo de mapeamento, pode ser ajustado conforme a lógica do seu negócio
         if (tipoProcesso.getNome().equalsIgnoreCase("Licença de resíduos sólidos")) {
             return setorRepository.findById(2L).orElseThrow(() -> new RuntimeException("Setor não encontrado"));
         }
-
+        // Adicione outros tipos de mapeamento conforme necessário
         throw new RuntimeException("Setor não encontrado para o tipo de processo: " + tipoProcesso.getNome());
     }
 }

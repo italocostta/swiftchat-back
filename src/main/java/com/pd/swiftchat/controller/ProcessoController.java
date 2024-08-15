@@ -4,10 +4,9 @@ import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.Processo;
 import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.TipoProcesso;
-import com.pd.swiftchat.repository.ProcessoRepository;
-import com.pd.swiftchat.repository.SetorRepository;
-import com.pd.swiftchat.repository.TipoProcessoRepository;
+import com.pd.swiftchat.service.ProcessoService;
 import com.pd.swiftchat.service.SetorService;
+import com.pd.swiftchat.repository.TipoProcessoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,49 +19,44 @@ import java.util.Optional;
 public class ProcessoController {
 
     @Autowired
-    private ProcessoRepository processoRepository;
+    private ProcessoService processoService;
 
     @Autowired
     private TipoProcessoRepository tipoProcessoRepository;
-
-    @Autowired
-    private SetorRepository setorRepository;
 
     @Autowired
     private SetorService setorService;
 
     @GetMapping
     public List<Processo> listarProcessos() {
-        return processoRepository.findAll();
+        return processoService.getAllProcessos();
     }
 
     @PostMapping
-    public Processo criarProcesso(@RequestBody Processo processo) {
+    public ResponseEntity<?> criarProcesso(@RequestBody Processo processo) {
         Optional<TipoProcesso> tipoProcesso = tipoProcessoRepository.findById(processo.getTipoProcesso().getId());
         if (tipoProcesso.isPresent()) {
             processo.setTipoProcesso(tipoProcesso.get());
-            // Set default intermediate sector
-            Optional<Setor> setorIntermediario = setorRepository.findById(1L); // Supondo que o setor intermediário tem ID 1
-            setorIntermediario.ifPresent(processo::setSetor);
-            return processoRepository.save(processo);
+            try {
+                Processo novoProcesso = processoService.createProcesso(processo);
+                return ResponseEntity.ok(novoProcesso);
+            } catch (RuntimeException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         } else {
-            throw new ResourceNotFoundException("Tipo de Processo não encontrado");
+            return ResponseEntity.badRequest().body("Tipo de Processo não encontrado");
         }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Processo> obterProcesso(@PathVariable Long id) {
-        Optional<Processo> processo = processoRepository.findById(id);
-        if (processo.isPresent()) {
-            return ResponseEntity.ok(processo.get());
-        } else {
-            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
-        }
+        Optional<Processo> processo = processoService.getProcessoById(id);
+        return processo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Processo> atualizarProcesso(@PathVariable Long id, @RequestBody Processo processoAtualizado) {
-        Optional<Processo> processoExistente = processoRepository.findById(id);
+        Optional<Processo> processoExistente = processoService.getProcessoById(id);
         if (processoExistente.isPresent()) {
             Processo processo = processoExistente.get();
             processo.setNome(processoAtualizado.getNome());
@@ -72,47 +66,47 @@ public class ProcessoController {
             if (tipoProcesso.isPresent()) {
                 processo.setTipoProcesso(tipoProcesso.get());
             } else {
-                throw new ResourceNotFoundException("Tipo de Processo não encontrado");
+                return ResponseEntity.badRequest().body(null);
             }
-            return ResponseEntity.ok(processoRepository.save(processo));
+            return ResponseEntity.ok(processoService.updateProcesso(id, processo));
         } else {
-            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}/setor/{setorId}")
     public ResponseEntity<Processo> moverProcessoParaSetor(@PathVariable Long id, @PathVariable Long setorId) {
-        Optional<Processo> processoExistente = processoRepository.findById(id);
-        Optional<Setor> setorDestino = setorRepository.findById(setorId);
+        Optional<Processo> processoExistente = processoService.getProcessoById(id);
+        Optional<Setor> setorDestino = setorService.getSetorById(setorId);  // Use o setorService para obter o setor
         if (processoExistente.isPresent() && setorDestino.isPresent()) {
             Processo processo = processoExistente.get();
             processo.setSetor(setorDestino.get());
-            return ResponseEntity.ok(processoRepository.save(processo));
+            return ResponseEntity.ok(processoService.updateProcesso(id, processo));
         } else {
-            throw new ResourceNotFoundException("Processo ou Setor não encontrado");
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}/encaminhar")
     public ResponseEntity<Processo> encaminharParaSetorEspecifico(@PathVariable Long id) {
-        Optional<Processo> processoExistente = processoRepository.findById(id);
+        Optional<Processo> processoExistente = processoService.getProcessoById(id);
         if (processoExistente.isPresent()) {
             Processo processo = processoExistente.get();
             Setor setorEspecifico = setorService.getSetorPorTipoProcesso(processo.getTipoProcesso());
             processo.setSetor(setorEspecifico);
-            return ResponseEntity.ok(processoRepository.save(processo));
+            return ResponseEntity.ok(processoService.updateProcesso(id, processo));
         } else {
-            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProcesso(@PathVariable Long id) {
-        if (processoRepository.existsById(id)) {
-            processoRepository.deleteById(id);
+        if (processoService.getProcessoById(id).isPresent()) {
+            processoService.deleteProcesso(id);
             return ResponseEntity.noContent().build();
         } else {
-            throw new ResourceNotFoundException("Processo não encontrado com id: " + id);
+            return ResponseEntity.notFound().build();
         }
     }
 }
