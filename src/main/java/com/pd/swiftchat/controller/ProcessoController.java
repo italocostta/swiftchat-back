@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/processos")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProcessoController {
 
     @Autowired
@@ -62,6 +63,8 @@ public class ProcessoController {
             processo.setNome(processoAtualizado.getNome());
             processo.setDescricao(processoAtualizado.getDescricao());
             processo.setUsuario(processoAtualizado.getUsuario());
+            processo.setCpf(processoAtualizado.getCpf());
+            processo.setTipoPessoa(processoAtualizado.getTipoPessoa());
             Optional<TipoProcesso> tipoProcesso = tipoProcessoRepository.findById(processoAtualizado.getTipoProcesso().getId());
             if (tipoProcesso.isPresent()) {
                 processo.setTipoProcesso(tipoProcesso.get());

@@ -38,6 +38,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(CpfCnpjJaUtilizadoException.class)
+    public ResponseEntity<ErrorResponse> handleCpfCnpjJaUtilizadoException(CpfCnpjJaUtilizadoException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+
     public static class ErrorResponse {
         private int status;
         private String message;

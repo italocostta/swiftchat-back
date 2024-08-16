@@ -1,5 +1,6 @@
 package com.pd.swiftchat.service;
 
+import com.pd.swiftchat.exception.CpfCnpjJaUtilizadoException;
 import com.pd.swiftchat.model.Processo;
 import com.pd.swiftchat.repository.ProcessoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,16 @@ public class ProcessoService {
     }
 
     public Processo createProcesso(Processo processo) {
-        Optional<Processo> existingProcesso = processoRepository.findFirstByUsuario(processo.getUsuario());
+        Optional<Processo> existingProcesso = processoRepository.findByCpf(processo.getCpf());
         if (existingProcesso.isPresent()) {
+            throw new CpfCnpjJaUtilizadoException("CPF/CNPJ já utilizado em um processo. Aguarde a conclusão do mesmo.");
+        }
+
+        Optional<Processo> existingUsuarioProcesso = processoRepository.findFirstByUsuario(processo.getUsuario());
+        if (existingUsuarioProcesso.isPresent()) {
             throw new RuntimeException("O usuário já possui um processo. Aguarde o deferimento ou indeferimento do mesmo.");
         }
+
         return processoRepository.save(processo);
     }
 

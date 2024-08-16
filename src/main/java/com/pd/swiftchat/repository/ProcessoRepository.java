@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ProcessoRepository extends JpaRepository<Processo, Long> {
     Optional<Processo> findFirstByUsuario(String usuario);
+    Optional<Processo> findByCpf(String cpf);
 }

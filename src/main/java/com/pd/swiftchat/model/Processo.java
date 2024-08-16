@@ -1,9 +1,10 @@
 package com.pd.swiftchat.model;
 
 import jakarta.persistence.*;
-import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Random;
 
 @Entity
 @Table(name = "processo")
@@ -25,6 +26,12 @@ public class Processo {
 
     @Column(nullable = false)
     private String usuario;
+
+    @Column(nullable = false)
+    private String cpf;
+
+    @Column(nullable = true)
+    private String tipoPessoa; // "física" ou "jurídica"
 
     @ManyToOne
     @JoinColumn(name = "tipo_processo_id", nullable = false)

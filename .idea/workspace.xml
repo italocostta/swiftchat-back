@@ -6,14 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/SetorRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/SetorRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +109,9 @@
       <workItem from="1723643630920" duration="313000" />
       <workItem from="1723646484480" duration="809000" />
       <workItem from="1723692919757" duration="4568000" />
-      <workItem from="1723698214149" duration="3441000" />
+      <workItem from="1723698214149" duration="4124000" />
+      <workItem from="1723751714998" duration="1324000" />
+      <workItem from="1723753178570" duration="9188000" />
     </task>
     <servers />
   </component>
