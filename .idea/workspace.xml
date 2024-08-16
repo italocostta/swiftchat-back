@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +69,22 @@
       <recent name="com.pd.swiftchat.config" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.ProcessoServiceTest">
+    <configuration name="ProcessoServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="swiftchat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pd.swiftchat.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pd.swiftchat.service" />
+      <option name="MAIN_CLASS_NAME" value="com.pd.swiftchat.service.ProcessoServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SwiftchatApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="swiftchat" />
@@ -84,6 +93,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.ProcessoServiceTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -111,7 +125,9 @@
       <workItem from="1723692919757" duration="4568000" />
       <workItem from="1723698214149" duration="4124000" />
       <workItem from="1723751714998" duration="1324000" />
-      <workItem from="1723753178570" duration="9188000" />
+      <workItem from="1723753178570" duration="10069000" />
+      <workItem from="1723776892049" duration="534000" />
+      <workItem from="1723778108702" duration="3675000" />
     </task>
     <servers />
   </component>
