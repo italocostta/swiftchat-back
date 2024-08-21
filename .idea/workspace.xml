@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
       <recent name="com.pd.swiftchat.config" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ProcessoServiceTest">
+  <component name="RunManager" selected="Spring Boot.SwiftchatApplication">
     <configuration name="ProcessoServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="swiftchat" />
       <extension name="coverage">
@@ -102,8 +101,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.300" />
-        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.300" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
       </set>
     </attachedChunks>
   </component>
@@ -128,6 +127,7 @@
       <workItem from="1723753178570" duration="10069000" />
       <workItem from="1723776892049" duration="534000" />
       <workItem from="1723778108702" duration="3675000" />
+      <workItem from="1724195188955" duration="4354000" />
     </task>
     <servers />
   </component>

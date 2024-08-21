@@ -2,7 +2,9 @@ package com.pd.swiftchat.service;
 
 import com.pd.swiftchat.exception.CpfCnpjJaUtilizadoException;
 import com.pd.swiftchat.model.Processo;
+import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.repository.ProcessoRepository;
+import com.pd.swiftchat.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class ProcessoService {
 
     @Autowired
     private ProcessoRepository processoRepository;
+
+    @Autowired
+    private SetorRepository setorRepository;  // Adicione essa linha para acessar o SetorRepository
 
     public List<Processo> getAllProcessos() {
         return processoRepository.findAll();
@@ -32,6 +37,14 @@ public class ProcessoService {
         Optional<Processo> existingUsuarioProcesso = processoRepository.findFirstByUsuario(processo.getUsuario());
         if (existingUsuarioProcesso.isPresent()) {
             throw new RuntimeException("O usuário já possui um processo. Aguarde o deferimento ou indeferimento do mesmo.");
+        }
+
+        // Busca pelo setor "Setor Intermediário" no banco de dados
+        Optional<Setor> setorIntermediario = setorRepository.findByNome("Setor Intermediário");
+        if (setorIntermediario.isPresent()) {
+            processo.setSetor(setorIntermediario.get());  // Atribui o setor intermediário ao processo
+        } else {
+            throw new RuntimeException("Setor Intermediário não encontrado. Verifique se ele está cadastrado no banco de dados.");
         }
 
         return processoRepository.save(processo);
