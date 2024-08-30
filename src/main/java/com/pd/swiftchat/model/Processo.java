@@ -40,6 +40,8 @@ public class Processo {
     @ManyToOne
     @JoinColumn(name = "setor_id", nullable = true)
     private Setor setor;
+    @Setter
+    private String fileName;
 
     @PrePersist
     public void generateNumeroProcesso() {
@@ -48,4 +50,5 @@ public class Processo {
             this.numeroProcesso = 10000 + random.nextInt(90000);
         }
     }
+
 }

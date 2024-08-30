@@ -1,6 +1,5 @@
 package com.pd.swiftchat.service;
 
-import com.pd.swiftchat.exception.SetorIdOuNomeObrigatorioException;
 import com.pd.swiftchat.exception.SetorJaExisteException;
 import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.TipoProcesso;
@@ -25,9 +24,13 @@ public class SetorService {
         return setorRepository.findById(id);
     }
 
+    public Optional<Setor> getSetorByNome(String nome) {
+        return setorRepository.findByNome(nome);
+    }
+
     public Setor createSetor(Setor setor) {
         if (setor.getId() == null || setor.getNome() == null || setor.getNome().isEmpty()) {
-            throw new SetorIdOuNomeObrigatorioException("ID e nome do setor são obrigatórios.");
+            throw new SetorJaExisteException("ID e nome do setor são obrigatórios.");
         }
         if (setorRepository.existsById(setor.getId())) {
             throw new SetorJaExisteException("O setor com o ID fornecido já existe.");

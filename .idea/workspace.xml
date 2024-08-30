@@ -6,6 +6,27 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/SetorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/SetorController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/ErrorResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler$ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler$ErrorResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/SetorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/SetorService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +37,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -23,12 +45,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;italocostta&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/italocostta/swiftchat-back.git&quot;,
+    &quot;accountId&quot;: &quot;7946aa7a-bb54-4719-a947-1f93f6d42da6&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -43,6 +73,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Maven.swiftchat [install].executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
@@ -59,7 +90,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -127,11 +158,28 @@
       <workItem from="1723753178570" duration="10069000" />
       <workItem from="1723776892049" duration="534000" />
       <workItem from="1723778108702" duration="3675000" />
-      <workItem from="1724195188955" duration="4354000" />
+      <workItem from="1724195188955" duration="7106000" />
+      <workItem from="1724211375317" duration="12078000" />
+      <workItem from="1724290832836" duration="9850000" />
+      <workItem from="1724380646800" duration="1246000" />
+      <workItem from="1724446617917" duration="1123000" />
+      <workItem from="1724970790853" duration="19605000" />
+      <workItem from="1724993233154" duration="5581000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

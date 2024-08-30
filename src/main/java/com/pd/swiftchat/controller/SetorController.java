@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/setores")
+@RequestMapping("/api/setores")
 public class SetorController {
 
     @Autowired
