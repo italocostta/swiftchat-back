@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class LoginController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class LoginController {
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
+                        loginRequest.getCpfCnpj(),
                         loginRequest.getPassword()
                 )
         );
@@ -38,4 +38,5 @@ public class LoginController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
+
 }

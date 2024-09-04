@@ -1,16 +1,16 @@
 package com.pd.swiftchat.dto;
 
 public class LoginRequest {
-    private String username;
+    private String cpfCnpj;
     private String password;
 
     // Getters e setters
-    public String getUsername() {
-        return username;
+    public String getCpfCnpj() {
+        return cpfCnpj;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
     }
 
     public String getPassword() {

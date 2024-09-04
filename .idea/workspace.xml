@@ -6,27 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/SetorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/ErrorResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/SetorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/SetorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/SetorController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/ErrorResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler$ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler$ErrorResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/exception/GlobalExceptionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/SetorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/SetorService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/UserDetailsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/dto/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/dto/LoginRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/UserDetailsServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/UserDetailsServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +61,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Maven.swiftchat [install].executor&quot;: &quot;Run&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-Database detector&quot;: &quot;Database detector&quot;,
+    &quot;Notification.DoNotAsk-Database detector&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
@@ -132,8 +121,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
-        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
       </set>
     </attachedChunks>
   </component>
@@ -165,6 +154,10 @@
       <workItem from="1724446617917" duration="1123000" />
       <workItem from="1724970790853" duration="19605000" />
       <workItem from="1724993233154" duration="5581000" />
+      <workItem from="1725332827765" duration="443000" />
+      <workItem from="1725333376261" duration="597000" />
+      <workItem from="1725334085490" duration="329000" />
+      <workItem from="1725403187329" duration="27000" />
     </task>
     <servers />
   </component>

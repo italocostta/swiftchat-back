@@ -18,6 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String cpfOrCnpj) throws UsernameNotFoundException {
+        // Tenta buscar o usuário por CPF ou CNPJ
         Optional<Usuario> usuarioOpt = usuarioRepository.findByCpf(cpfOrCnpj);
 
         if (!usuarioOpt.isPresent()) {

@@ -36,20 +36,20 @@ public class Usuario implements UserDetails {
     @Setter
     private String password;
 
+    @Getter
+    @Setter
     @Column(name = "tipo_usuario", columnDefinition = "smallint")
     private int tipoUsuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.isUsuarioComum()) {
-            return Collections.singletonList(new SimpleGrantedAuthority("USUARIO"));
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USUARIO"));
         } else if (this.isFuncionario()) {
-            return Collections.singletonList(new SimpleGrantedAuthority("FUNCIONARIO"));
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
         }
         return Collections.emptyList();
     }
-
-
 
     @Override
     public String getPassword() {
@@ -81,25 +81,14 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public int getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(int tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    // Método auxiliar para verificar se é um usuário comum
     public boolean isUsuarioComum() {
         return this.tipoUsuario == 1;
     }
 
-    // Método auxiliar para verificar se é um funcionário
     public boolean isFuncionario() {
         return this.tipoUsuario == 2;
     }
 
-    // Método para retornar uma string representando o tipo de usuário
     public String getTipoUsuarioDescricao() {
         return this.tipoUsuario == 1 ? "Usuário Comum" : "Funcionário";
     }
