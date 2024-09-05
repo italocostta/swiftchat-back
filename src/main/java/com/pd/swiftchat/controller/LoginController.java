@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/")
 public class LoginController {
 
     @Autowired
@@ -24,6 +24,9 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        System.out.println("Tentativa de login com CPF/CNPJ: " + loginRequest.getCpfCnpj());
+        System.out.println("Senha fornecida: " + loginRequest.getPassword());
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getCpfCnpj(),
@@ -38,5 +41,5 @@ public class LoginController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
-
 }
+

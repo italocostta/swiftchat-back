@@ -36,17 +36,15 @@ public class Usuario implements UserDetails {
     @Setter
     private String password;
 
-    @Getter
-    @Setter
     @Column(name = "tipo_usuario", columnDefinition = "smallint")
     private int tipoUsuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.isUsuarioComum()) {
-            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USUARIO"));
+            return Collections.singletonList(new SimpleGrantedAuthority("USUARIO"));
         } else if (this.isFuncionario()) {
-            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+            return Collections.singletonList(new SimpleGrantedAuthority("FUNCIONARIO"));
         }
         return Collections.emptyList();
     }
@@ -79,6 +77,14 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(int tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
     public boolean isUsuarioComum() {

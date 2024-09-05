@@ -2,14 +2,12 @@ package com.pd.swiftchat.config;
 
 import com.pd.swiftchat.security.JwtAuthenticationEntryPoint;
 import com.pd.swiftchat.security.JwtRequestFilter;
-import com.pd.swiftchat.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,10 +38,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/usuarios/register").permitAll()
-                        .requestMatchers("/api/processos/").hasRole("USUARIO")
+                        .requestMatchers("/api/processos/").hasAuthority("USUARIO")  // Altere para hasAuthority
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandlingConfigurer ->
@@ -53,5 +51,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

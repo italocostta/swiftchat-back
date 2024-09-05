@@ -6,14 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/UserDetailsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/dto/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/dto/LoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/UserDetailsServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/UserDetailsServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,6 +155,9 @@
       <workItem from="1725333376261" duration="597000" />
       <workItem from="1725334085490" duration="329000" />
       <workItem from="1725403187329" duration="27000" />
+      <workItem from="1725413830086" duration="307000" />
+      <workItem from="1725548447805" duration="680000" />
+      <workItem from="1725570560423" duration="3288000" />
     </task>
     <servers />
   </component>
