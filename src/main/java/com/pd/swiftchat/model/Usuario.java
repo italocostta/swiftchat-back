@@ -36,6 +36,11 @@ public class Usuario implements UserDetails {
     @Setter
     private String password;
 
+    @Getter
+    @Setter
+    @Column(name = "tipo_pessoa", columnDefinition = "varchar(10)")  // Adiciona a coluna tipo_pessoa no banco
+    private String tipoPessoa;  // "FISICA" ou "JURIDICA"
+
     @Column(name = "tipo_usuario", columnDefinition = "smallint")
     private int tipoUsuario;
 
@@ -87,14 +92,17 @@ public class Usuario implements UserDetails {
         this.tipoUsuario = tipoUsuario;
     }
 
+    // Método auxiliar para verificar se é um usuário comum
     public boolean isUsuarioComum() {
         return this.tipoUsuario == 1;
     }
 
+    // Método auxiliar para verificar se é um funcionário
     public boolean isFuncionario() {
         return this.tipoUsuario == 2;
     }
 
+    // Método para retornar uma string representando o tipo de usuário
     public String getTipoUsuarioDescricao() {
         return this.tipoUsuario == 1 ? "Usuário Comum" : "Funcionário";
     }

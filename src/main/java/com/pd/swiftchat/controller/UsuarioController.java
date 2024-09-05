@@ -34,8 +34,10 @@ public class UsuarioController {
 
         if (usuario.getCpf() != null) {
             existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
+            usuario.setTipoPessoa("FISICA");  // Definindo tipo pessoa como FÍSICA se for CPF
         } else {
             existingUsuario = usuarioRepository.findByCnpj(usuario.getCnpj());
+            usuario.setTipoPessoa("JURIDICA");  // Definindo tipo pessoa como JURÍDICA se for CNPJ
         }
 
         if (existingUsuario.isPresent()) {
@@ -45,12 +47,10 @@ public class UsuarioController {
         // Codificando a senha antes de salvar
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-        // NÃO PRECISA DEFINIR AUTHORITIES AQUI
-        // O método getAuthorities() na classe Usuario será suficiente
-
         // Salvando o novo usuário
         Usuario novoUsuario = usuarioRepository.save(usuario);
         return ResponseEntity.ok(novoUsuario);
     }
+
 
 }
