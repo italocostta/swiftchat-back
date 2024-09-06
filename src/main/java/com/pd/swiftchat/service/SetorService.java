@@ -29,12 +29,6 @@ public class SetorService {
     }
 
     public Setor createSetor(Setor setor) {
-        if (setor.getId() == null || setor.getNome() == null || setor.getNome().isEmpty()) {
-            throw new SetorJaExisteException("ID e nome do setor são obrigatórios.");
-        }
-        if (setorRepository.existsById(setor.getId())) {
-            throw new SetorJaExisteException("O setor com o ID fornecido já existe.");
-        }
         Optional<Setor> existingSetor = setorRepository.findByNome(setor.getNome());
         if (existingSetor.isPresent()) {
             throw new SetorJaExisteException("O setor com o nome fornecido já existe.");
