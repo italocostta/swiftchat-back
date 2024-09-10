@@ -74,17 +74,6 @@ public class ProcessoService {
         processoRepository.deleteById(id);
     }
 
-    public void saveFile(Long id, MultipartFile file) throws IOException {
-        Processo processo = processoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado"));
-
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        file.transferTo(new java.io.File("caminho/para/salvar/arquivos/" + fileName));
-
-        processo.setFileName(fileName);
-        processoRepository.save(processo);
-    }
-
     private boolean isFuncionario(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("FUNCIONARIO"));

@@ -197,15 +197,4 @@ public class ProcessoController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @Secured("USUARIO")
-    @PostMapping("/{id}/upload")
-    public ResponseEntity<?> uploadArquivo(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        try {
-            processoService.saveFile(id, file);
-            return ResponseEntity.ok("Arquivo carregado com sucesso.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Falha no upload do arquivo.");
-        }
-    }
 }
