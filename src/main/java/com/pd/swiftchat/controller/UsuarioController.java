@@ -5,11 +5,9 @@ import com.pd.swiftchat.model.Usuario;
 import com.pd.swiftchat.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -24,20 +22,37 @@ public class UsuarioController {
 
     @PostMapping("/register")
     public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
-        // Validação: Certifique-se de que o CPF ou CNPJ está presente
-        if (usuario.getCpf() == null && usuario.getCnpj() == null) {
-            throw new IllegalArgumentException("CPF ou CNPJ deve ser fornecido.");
+        // Validação de CPF e CNPJ
+        if (usuario.getCpf() != null && usuario.getCpf().length() != 11) {
+            throw new IllegalArgumentException("O CPF deve conter exatamente 11 dígitos.");
+        }
+        if (usuario.getCnpj() != null && usuario.getCnpj().length() != 14) {
+            throw new IllegalArgumentException("O CNPJ deve conter exatamente 14 dígitos.");
         }
 
         // Verificação se já existe um usuário com o mesmo CPF ou CNPJ
         Optional<Usuario> existingUsuario;
 
-        if (usuario.getCpf() != null) {
+        if (usuario.getTipoUsuario() == 2) {  // Funcionário
+            // Funcionário só pode ser Pessoa Física (com CPF)
+            if (usuario.getCpf() == null) {
+                throw new IllegalArgumentException("Funcionário deve ter CPF.");
+            }
             existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
-            usuario.setTipoPessoa("FISICA");  // Definindo tipo pessoa como FÍSICA se for CPF
+            usuario.setTipoPessoa("FISICA");  // Funcionário sempre será Pessoa Física
+        } else if (usuario.getTipoUsuario() == 1) {  // Usuário comum
+            // Usuário pode ser Pessoa Física ou Jurídica
+            if (usuario.getCpf() != null) {
+                existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
+                usuario.setTipoPessoa("FISICA");  // Definindo como FÍSICA
+            } else if (usuario.getCnpj() != null) {
+                existingUsuario = usuarioRepository.findByCnpj(usuario.getCnpj());
+                usuario.setTipoPessoa("JURIDICA");  // Definindo como JURÍDICA
+            } else {
+                throw new IllegalArgumentException("Usuário deve ter CPF ou CNPJ.");
+            }
         } else {
-            existingUsuario = usuarioRepository.findByCnpj(usuario.getCnpj());
-            usuario.setTipoPessoa("JURIDICA");  // Definindo tipo pessoa como JURÍDICA se for CNPJ
+            throw new IllegalArgumentException("Tipo de usuário inválido.");
         }
 
         if (existingUsuario.isPresent()) {
@@ -51,6 +66,4 @@ public class UsuarioController {
         Usuario novoUsuario = usuarioRepository.save(usuario);
         return ResponseEntity.ok(novoUsuario);
     }
-
-
 }

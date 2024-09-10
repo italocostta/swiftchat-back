@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/usuarios/register").permitAll()
                         .requestMatchers("/api/processos/").hasAuthority("USUARIO")  // Altere para hasAuthority
+                        .requestMatchers("/api/setores/**").hasAuthority("FUNCIONARIO")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandlingConfigurer ->

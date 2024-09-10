@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +24,16 @@ public class ProcessoService {
     @Autowired
     private SetorRepository setorRepository;
 
+    // Método que lista processos de acordo com o tipo de usuário
     public List<Processo> getAllProcessos(UserDetails userDetails) {
         if (isFuncionario(userDetails)) {
+            // Funcionário pode ver todos os processos
             return processoRepository.findAll();
         } else {
+            // Usuário comum só vê seus próprios processos
             return processoRepository.findByCpf(userDetails.getUsername());
         }
     }
-
 
     public Optional<Processo> getProcessoById(Long id) {
         return processoRepository.findById(id);
@@ -42,6 +43,7 @@ public class ProcessoService {
         Processo processo = processoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado"));
 
+        // Usuário só pode acessar seu próprio processo, funcionário pode acessar qualquer um
         if (!userDetails.getUsername().equals(processo.getCpf()) && !isFuncionario(userDetails)) {
             throw new AccessDeniedException("Você não tem permissão para acessar este processo.");
         }
@@ -50,9 +52,6 @@ public class ProcessoService {
     }
 
     public Processo createProcesso(Processo processo) {
-        // Remove a verificação de CPF/CNPJ duplicado
-        // Remove a verificação de processo existente para o mesmo usuário
-
         Optional<Setor> setorIntermediario = setorRepository.findByNome("Setor Intermediario");
         if (setorIntermediario.isPresent()) {
             processo.setSetor(setorIntermediario.get());
@@ -79,8 +78,6 @@ public class ProcessoService {
         Processo processo = processoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado"));
 
-        // Código para salvar o arquivo localmente ou em um serviço de armazenamento em nuvem
-        // Por exemplo, salvar em um diretório local:
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         file.transferTo(new java.io.File("caminho/para/salvar/arquivos/" + fileName));
 

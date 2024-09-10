@@ -42,10 +42,13 @@ public class Usuario implements UserDetails {
     private String tipoPessoa;  // "FISICA" ou "JURIDICA"
 
     @Column(name = "tipo_usuario", columnDefinition = "smallint")
-    private int tipoUsuario;
+    @Getter
+    @Setter
+    private int tipoUsuario;  // 1 = Usuario, 2 = Funcionario
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Define as permissões com base no tipo de usuário
         if (this.isUsuarioComum()) {
             return Collections.singletonList(new SimpleGrantedAuthority("USUARIO"));
         } else if (this.isFuncionario()) {
@@ -82,14 +85,6 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public int getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(int tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
     }
 
     // Método auxiliar para verificar se é um usuário comum

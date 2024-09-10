@@ -4,10 +4,10 @@ import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.service.SetorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/setores")
@@ -21,6 +21,7 @@ public class SetorController {
         return setorService.getAllSetores();
     }
 
+    @Secured("FUNCIONARIO")  // Permitir apenas que funcionários criem setores
     @PostMapping
     public ResponseEntity<?> criarSetor(@RequestBody Setor setor) {
         try {
@@ -38,6 +39,7 @@ public class SetorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Secured("FUNCIONARIO")  // Permitir apenas que funcionários atualizem setores
     @PutMapping("/{id}")
     public ResponseEntity<Setor> atualizarSetor(@PathVariable Long id, @RequestBody Setor setorAtualizado) {
         Setor setor = setorService.updateSetor(id, setorAtualizado);
@@ -48,6 +50,7 @@ public class SetorController {
         }
     }
 
+    @Secured("FUNCIONARIO")  // Permitir apenas que funcionários deletem setores
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarSetor(@PathVariable Long id) {
         setorService.deleteSetor(id);

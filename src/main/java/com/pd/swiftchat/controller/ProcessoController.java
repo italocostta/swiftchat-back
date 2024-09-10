@@ -38,7 +38,8 @@ public class ProcessoController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Secured("USUARIO")
+    // Esse método é compartilhado entre usuário comum e funcionário
+    @Secured({"USUARIO", "FUNCIONARIO"})
     @GetMapping
     public ResponseEntity<List<ProcessoDTO>> listarProcessos(@AuthenticationPrincipal UserDetails userDetails) {
         List<Processo> processos = processoService.getAllProcessos(userDetails);
@@ -60,6 +61,7 @@ public class ProcessoController {
 
         return ResponseEntity.ok(processosDTO);
     }
+
 
     @Secured("USUARIO")
     @PostMapping
@@ -183,6 +185,7 @@ public class ProcessoController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @Secured("FUNCIONARIO")
     @DeleteMapping("/{id}")
