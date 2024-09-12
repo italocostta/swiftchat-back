@@ -2,6 +2,7 @@ package com.pd.swiftchat.controller;
 
 import com.pd.swiftchat.dto.JwtResponse;
 import com.pd.swiftchat.dto.LoginRequest;
+import com.pd.swiftchat.model.Usuario;
 import com.pd.swiftchat.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,13 @@ public class LoginController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        final String token = jwtTokenUtil.generateToken(userDetails.getUsername());
+        final Usuario usuario = (Usuario) authentication.getPrincipal();  // Aqui retorna o objeto Usuario
+        final String token = jwtTokenUtil.generateToken(usuario.getUsername());
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        // Verifica o tipo de usuário (FUNCIONARIO ou USUARIO)
+        String userType = usuario.isFuncionario() ? "FUNCIONARIO" : "USUARIO";
+
+        // Retorna a resposta com o token, o tipo de usuário e o nome do usuário
+        return ResponseEntity.ok(new JwtResponse(token, userType, usuario.getNome()));
     }
 }
-
