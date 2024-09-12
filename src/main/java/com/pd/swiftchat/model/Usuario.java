@@ -38,6 +38,11 @@ public class Usuario implements UserDetails {
     @Setter
     private String razaoSocial;  // Razão social para pessoa jurídica
 
+    @Getter
+    @Setter
+    @Column(nullable = true)
+    private String matricula;  // Campo de matrícula para funcionários
+
     @Setter
     private String password;
 

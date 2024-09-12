@@ -7,7 +7,9 @@
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Usuario.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +158,7 @@
       <workItem from="1725548447805" duration="680000" />
       <workItem from="1725570560423" duration="5377000" />
       <workItem from="1725996042204" duration="6186000" />
-      <workItem from="1726104823894" duration="8768000" />
+      <workItem from="1726104823894" duration="11488000" />
     </task>
     <servers />
   </component>

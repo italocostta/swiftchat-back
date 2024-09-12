@@ -30,13 +30,16 @@ public class UsuarioController {
             throw new IllegalArgumentException("O CNPJ deve conter exatamente 14 dígitos.");
         }
 
-        // Defina o tipo de pessoa (FISICA ou JURIDICA) corretamente com base nos valores recebidos.
+        // Verifica o tipo de usuário e faz as validações necessárias
         if (usuario.getTipoUsuario() == 2) {  // Funcionário
             // Funcionário só pode ser Pessoa Física (com CPF)
             if (usuario.getCpf() == null) {
                 throw new IllegalArgumentException("Funcionário deve ter CPF.");
             }
-            usuario.setTipoPessoa("FISICA");  // Definindo como Pessoa Física
+            if (usuario.getMatricula() == null || usuario.getMatricula().length() != 11) {
+                throw new IllegalArgumentException("Funcionário deve ter uma matrícula válida de 11 dígitos.");
+            }
+            usuario.setTipoPessoa("FISICA");  // Funcionário sempre será Pessoa Física
         } else if (usuario.getTipoUsuario() == 1) {  // Usuário comum
             // Usuário pode ser Pessoa Física ou Jurídica
             if (usuario.getCpf() != null) {
@@ -51,13 +54,13 @@ public class UsuarioController {
         }
 
         // Validação de nome e sobrenome
-        if (!validarNome(usuario.getNome()) || (usuario.getTipoPessoa() != null && usuario.getTipoPessoa().equals("FISICA") && !validarNome(usuario.getSobrenome()))) {
+        if (!validarNome(usuario.getNome()) ||
+                (usuario.getTipoPessoa() != null && usuario.getTipoPessoa().equals("FISICA") && !validarNome(usuario.getSobrenome()))) {
             throw new IllegalArgumentException("Nome e sobrenome devem conter apenas letras e começar com letra maiúscula.");
         }
 
         // Verificação se já existe um usuário com o mesmo CPF ou CNPJ
         Optional<Usuario> existingUsuario;
-
         if (usuario.getCpf() != null) {
             existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
         } else {
@@ -68,6 +71,7 @@ public class UsuarioController {
             throw new CpfCnpjJaUtilizadoException("Usuário com o mesmo CPF ou CNPJ já existe.");
         }
 
+        // Codifica a senha antes de salvar
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         Usuario novoUsuario = usuarioRepository.save(usuario);
