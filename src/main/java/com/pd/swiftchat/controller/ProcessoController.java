@@ -38,6 +38,7 @@ import java.util.Optional;
 public class ProcessoController {
 
     private static final String UPLOAD_DIR = "uploads/";
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // Limite de 5 MB para arquivos
 
     @Autowired
     private ProcessoService processoService;
@@ -86,6 +87,14 @@ public class ProcessoController {
         System.out.println("Processo recebido: " + processo.getNome());
         if (arquivo != null) {
             System.out.println("Arquivo recebido: " + arquivo.getOriginalFilename());
+
+            // Validação do tipo e tamanho do arquivo
+            if (!arquivo.getContentType().equals("application/pdf")) {
+                throw new RuntimeException("Apenas arquivos PDF são permitidos.");
+            }
+            if (arquivo.getSize() > MAX_FILE_SIZE) {
+                throw new RuntimeException("O arquivo excede o tamanho máximo permitido de 5 MB.");
+            }
         } else {
             System.out.println("Nenhum arquivo recebido");
         }
@@ -151,7 +160,6 @@ public class ProcessoController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
 
     @Secured("FUNCIONARIO")
     @PutMapping("/{id}/setor/{setorId}")
@@ -241,6 +249,4 @@ public class ProcessoController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }
