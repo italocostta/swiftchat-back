@@ -31,15 +31,20 @@ public class Usuario implements UserDetails {
 
     @Getter
     @Setter
-    private String sobrenome;
+    @Column(nullable = true)
+    private String sobrenome;  // Sobrenome obrigatório para pessoa física
+
+    @Getter
+    @Setter
+    private String razaoSocial;  // Razão social para pessoa jurídica
 
     @Setter
     private String password;
 
     @Getter
     @Setter
-    @Column(name = "tipo_pessoa", columnDefinition = "varchar(10)")  // Adiciona a coluna tipo_pessoa no banco
-    private String tipoPessoa;  // "FISICA" ou "JURIDICA"
+    @Column(name = "tipo_pessoa", columnDefinition = "varchar(10)")  // "FISICA" ou "JURIDICA"
+    private String tipoPessoa;
 
     @Column(name = "tipo_usuario", columnDefinition = "smallint")
     @Getter
@@ -48,7 +53,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Define as permissões com base no tipo de usuário
         if (this.isUsuarioComum()) {
             return Collections.singletonList(new SimpleGrantedAuthority("USUARIO"));
         } else if (this.isFuncionario()) {
