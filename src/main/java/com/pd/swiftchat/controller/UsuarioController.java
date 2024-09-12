@@ -30,36 +30,19 @@ public class UsuarioController {
             throw new IllegalArgumentException("O CNPJ deve conter exatamente 14 dígitos.");
         }
 
-        // Verificação se já existe um usuário com o mesmo CPF ou CNPJ
-        Optional<Usuario> existingUsuario;
-
+        // Defina o tipo de pessoa (FISICA ou JURIDICA) corretamente com base nos valores recebidos.
         if (usuario.getTipoUsuario() == 2) {  // Funcionário
             // Funcionário só pode ser Pessoa Física (com CPF)
             if (usuario.getCpf() == null) {
                 throw new IllegalArgumentException("Funcionário deve ter CPF.");
             }
-            if (usuario.getSobrenome() == null || usuario.getSobrenome().isEmpty()) {
-                throw new IllegalArgumentException("Sobrenome é obrigatório para pessoa física.");
-            }
-            existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
-            usuario.setTipoPessoa("FISICA");  // Funcionário sempre será Pessoa Física
-            usuario.setRazaoSocial(null);  // Razão social não é aplicável para funcionários
+            usuario.setTipoPessoa("FISICA");  // Definindo como Pessoa Física
         } else if (usuario.getTipoUsuario() == 1) {  // Usuário comum
             // Usuário pode ser Pessoa Física ou Jurídica
             if (usuario.getCpf() != null) {
-                if (usuario.getSobrenome() == null || usuario.getSobrenome().isEmpty()) {
-                    throw new IllegalArgumentException("Sobrenome é obrigatório para pessoa física.");
-                }
-                existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
-                usuario.setTipoPessoa("FISICA");  // Definindo como FÍSICA
-                usuario.setRazaoSocial(null);  // Razão social não é aplicável para pessoa física
+                usuario.setTipoPessoa("FISICA");
             } else if (usuario.getCnpj() != null) {
-                if (usuario.getRazaoSocial() == null || usuario.getRazaoSocial().isEmpty()) {
-                    throw new IllegalArgumentException("Razão social é obrigatória para pessoa jurídica.");
-                }
-                existingUsuario = usuarioRepository.findByCnpj(usuario.getCnpj());
-                usuario.setTipoPessoa("JURIDICA");  // Definindo como JURÍDICA
-                usuario.setSobrenome(null);  // Sobrenome não é aplicável para pessoa jurídica
+                usuario.setTipoPessoa("JURIDICA");
             } else {
                 throw new IllegalArgumentException("Usuário deve ter CPF ou CNPJ.");
             }
@@ -67,15 +50,32 @@ public class UsuarioController {
             throw new IllegalArgumentException("Tipo de usuário inválido.");
         }
 
+        // Validação de nome e sobrenome
+        if (!validarNome(usuario.getNome()) || (usuario.getTipoPessoa() != null && usuario.getTipoPessoa().equals("FISICA") && !validarNome(usuario.getSobrenome()))) {
+            throw new IllegalArgumentException("Nome e sobrenome devem conter apenas letras e começar com letra maiúscula.");
+        }
+
+        // Verificação se já existe um usuário com o mesmo CPF ou CNPJ
+        Optional<Usuario> existingUsuario;
+
+        if (usuario.getCpf() != null) {
+            existingUsuario = usuarioRepository.findByCpf(usuario.getCpf());
+        } else {
+            existingUsuario = usuarioRepository.findByCnpj(usuario.getCnpj());
+        }
+
         if (existingUsuario.isPresent()) {
             throw new CpfCnpjJaUtilizadoException("Usuário com o mesmo CPF ou CNPJ já existe.");
         }
 
-        // Codificando a senha antes de salvar
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-        // Salvando o novo usuário
         Usuario novoUsuario = usuarioRepository.save(usuario);
         return ResponseEntity.ok(novoUsuario);
     }
+
+    private boolean validarNome(String nome) {
+        return nome.matches("^[A-Z][a-zA-ZÀ-ÿ\\s]+$");  // Nome deve começar com letra maiúscula e conter apenas letras
+    }
+
 }
