@@ -41,6 +41,9 @@ public class Processo {
     @JoinColumn(name = "setor_id", nullable = true)
     private Setor setor;
 
+    @Column(nullable = true)  // Adiciona o campo para armazenar o nome do arquivo
+    private String arquivo;
+
     @PrePersist
     public void generateNumeroProcesso() {
         if (this.numeroProcesso == null) {
@@ -48,5 +51,4 @@ public class Processo {
             this.numeroProcesso = 10000 + random.nextInt(90000);
         }
     }
-
 }

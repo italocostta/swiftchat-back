@@ -13,9 +13,9 @@ public class ProcessoDTO {
     private TipoProcesso tipoProcesso;
     private Setor setor;
     private String usuarioNome;
+    private String arquivo;  // Adicionar campo para o arquivo
 
     // Getters e Setters
-
     public Long getId() {
         return id;
     }
@@ -86,5 +86,13 @@ public class ProcessoDTO {
 
     public void setUsuarioNome(String usuarioNome) {
         this.usuarioNome = usuarioNome;
+    }
+
+    public String getArquivo() {
+        return arquivo;
+    }
+
+    public void setArquivo(String arquivo) {
+        this.arquivo = arquivo;
     }
 }
