@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/usuarios/register").permitAll()
-                        .requestMatchers("/api/processos/").hasAuthority("USUARIO")  // Altere para hasAuthority
+                        .requestMatchers("/api/processos/**").hasAnyAuthority("USUARIO", "FUNCIONARIO")
                         .requestMatchers("/api/setores/**").hasAuthority("FUNCIONARIO")
                         .anyRequest().authenticated()
                 )
@@ -53,3 +53,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

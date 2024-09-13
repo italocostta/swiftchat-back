@@ -56,7 +56,10 @@ public class ProcessoController {
     @Secured({"USUARIO", "FUNCIONARIO"})
     @GetMapping
     public ResponseEntity<List<ProcessoDTO>> listarProcessos(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Processo> processos = processoService.getAllProcessos(userDetails);
+        List<Processo> processos;
+
+        // Chama o método adequado de acordo com o tipo de usuário
+        processos = processoService.getAllProcessosByRole(userDetails);
 
         // Converte a lista de Processos em uma lista de ProcessosDTO
         List<ProcessoDTO> processosDTO = processos.stream().map(processo -> {
@@ -66,6 +69,7 @@ public class ProcessoController {
             dto.setDescricao(processo.getDescricao());
             dto.setNumeroProcesso(processo.getNumeroProcesso());
             dto.setCpf(processo.getCpf());
+            dto.setCnpj(processo.getCnpj());  // Inclui o CNPJ, se existir
             dto.setTipoPessoa(processo.getTipoPessoa());
             dto.setTipoProcesso(processo.getTipoProcesso());
             dto.setSetor(processo.getSetor());
@@ -87,14 +91,6 @@ public class ProcessoController {
         System.out.println("Processo recebido: " + processo.getNome());
         if (arquivo != null) {
             System.out.println("Arquivo recebido: " + arquivo.getOriginalFilename());
-
-            // Validação do tipo e tamanho do arquivo
-            if (!arquivo.getContentType().equals("application/pdf")) {
-                throw new RuntimeException("Apenas arquivos PDF são permitidos.");
-            }
-            if (arquivo.getSize() > MAX_FILE_SIZE) {
-                throw new RuntimeException("O arquivo excede o tamanho máximo permitido de 5 MB.");
-            }
         } else {
             System.out.println("Nenhum arquivo recebido");
         }
@@ -115,8 +111,16 @@ public class ProcessoController {
 
         // Associa automaticamente o usuário autenticado ao processo
         processo.setUsuario(usuario.getNome());
-        processo.setCpf(usuario.getCpf());
-        processo.setTipoPessoa(usuario.getTipoUsuario() == 1 ? "FISICA" : "JURIDICA");
+
+        // Ajusta o CPF ou CNPJ dependendo do tipo de pessoa
+        if (usuario.getCpf() != null) {
+            processo.setCpf(usuario.getCpf());
+            processo.setTipoPessoa("FISICA");
+        } else if (usuario.getCnpj() != null) {
+            processo.setCpf(null);  // Certifique-se de que o CPF seja nulo
+            processo.setCnpj(usuario.getCnpj());  // Ajusta o CNPJ
+            processo.setTipoPessoa("JURIDICA");
+        }
 
         // Atribui o processo ao setor intermediário automaticamente
         Optional<Setor> setorIntermediario = setorService.getSetorByNome("Setor Intermediario");
@@ -146,6 +150,7 @@ public class ProcessoController {
                 processoDTO.setDescricao(novoProcesso.getDescricao());
                 processoDTO.setNumeroProcesso(novoProcesso.getNumeroProcesso());
                 processoDTO.setCpf(novoProcesso.getCpf());
+                processoDTO.setCnpj(novoProcesso.getCnpj());  // Inclui o CNPJ no DTO
                 processoDTO.setTipoPessoa(novoProcesso.getTipoPessoa());
                 processoDTO.setTipoProcesso(novoProcesso.getTipoProcesso());
                 processoDTO.setSetor(novoProcesso.getSetor());
@@ -160,6 +165,7 @@ public class ProcessoController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
 
     @Secured("FUNCIONARIO")
     @PutMapping("/{id}/setor/{setorId}")

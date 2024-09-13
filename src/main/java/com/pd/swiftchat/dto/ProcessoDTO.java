@@ -9,6 +9,7 @@ public class ProcessoDTO {
     private String descricao;
     private int numeroProcesso;
     private String cpf;
+    private String cnpj; // Adicionar campo CNPJ
     private String tipoPessoa;
     private TipoProcesso tipoProcesso;
     private Setor setor;
@@ -54,6 +55,14 @@ public class ProcessoDTO {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     public String getTipoPessoa() {

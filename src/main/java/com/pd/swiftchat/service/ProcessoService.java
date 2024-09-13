@@ -24,14 +24,34 @@ public class ProcessoService {
     @Autowired
     private SetorRepository setorRepository;
 
-    // Método que lista processos de acordo com o tipo de usuário
-    public List<Processo> getAllProcessos(UserDetails userDetails) {
+    // Método para funcionários obterem todos os processos
+    public List<Processo> getAllProcessos() {
+        return processoRepository.findAll();
+    }
+
+    // Método para um usuário comum (física ou jurídica) obter seus próprios processos
+    public List<Processo> getProcessosByUsuario(UserDetails userDetails) {
+        String cpfOrCnpj = userDetails.getUsername();
+
+        if (cpfOrCnpj.length() == 11) {
+            // CPF - Pessoa Física
+            return processoRepository.findByCpf(cpfOrCnpj);
+        } else if (cpfOrCnpj.length() == 14) {
+            // CNPJ - Pessoa Jurídica
+            return processoRepository.findByCnpj(cpfOrCnpj);
+        } else {
+            throw new IllegalArgumentException("Identificador de usuário inválido: " + cpfOrCnpj);
+        }
+    }
+
+    // Método que decide se um usuário comum ou funcionário está chamando a listagem de processos
+    public List<Processo> getAllProcessosByRole(UserDetails userDetails) {
         if (isFuncionario(userDetails)) {
             // Funcionário pode ver todos os processos
-            return processoRepository.findAll();
+            return getAllProcessos();
         } else {
-            // Usuário comum só vê seus próprios processos
-            return processoRepository.findByCpf(userDetails.getUsername());
+            // Usuário comum só pode ver seus próprios processos
+            return getProcessosByUsuario(userDetails);
         }
     }
 
@@ -39,9 +59,10 @@ public class ProcessoService {
         return processoRepository.findById(id);
     }
 
+    // Método para acessar um processo específico, respeitando regras de acesso
     public Processo getProcessoById(Long id, UserDetails userDetails) throws ResourceNotFoundException {
         Processo processo = processoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado com ID: " + id));
 
         // Usuário só pode acessar seu próprio processo, funcionário pode acessar qualquer um
         if (!userDetails.getUsername().equals(processo.getCpf()) && !isFuncionario(userDetails)) {
@@ -51,6 +72,7 @@ public class ProcessoService {
         return processo;
     }
 
+    // Criação de um processo com a atribuição automática de setor intermediário
     public Processo createProcesso(Processo processo) {
         Optional<Setor> setorIntermediario = setorRepository.findByNome("Setor Intermediario");
         if (setorIntermediario.isPresent()) {
@@ -62,6 +84,7 @@ public class ProcessoService {
         return processoRepository.save(processo);
     }
 
+    // Atualização de um processo existente
     public Processo updateProcesso(Long id, Processo processoAtualizado) {
         if (processoRepository.existsById(id)) {
             processoAtualizado.setId(id);
@@ -70,11 +93,13 @@ public class ProcessoService {
         return null;
     }
 
+    // Deleção de um processo por ID
     public void deleteProcesso(Long id) {
         processoRepository.deleteById(id);
     }
 
-    private boolean isFuncionario(UserDetails userDetails) {
+    // Verifica se o usuário é um funcionário
+    public boolean isFuncionario(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("FUNCIONARIO"));
     }
