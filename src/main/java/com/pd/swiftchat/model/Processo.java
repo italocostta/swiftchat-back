@@ -27,11 +27,14 @@ public class Processo {
     @Column(nullable = false)
     private String usuario;
 
-    @Column(nullable = false)
+    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa física
     private String cpf;
 
+    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa jurídica
+    private String cnpj;  // Novo campo para armazenar o CNPJ de pessoas jurídicas
+
     @Column(nullable = true)
-    private String tipoPessoa; // "física" ou "jurídica"
+    private String tipoPessoa; // "FISICA" ou "JURIDICA"
 
     @ManyToOne
     @JoinColumn(name = "tipo_processo_id", nullable = false)
@@ -52,3 +55,4 @@ public class Processo {
         }
     }
 }
+

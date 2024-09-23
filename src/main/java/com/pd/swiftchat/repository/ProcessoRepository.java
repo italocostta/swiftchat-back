@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ProcessoRepository extends JpaRepository<Processo, Long> {
     List<Processo> findByCpf(String cpf);
+    List<Processo> findByCnpj(String cnpj);
 }
