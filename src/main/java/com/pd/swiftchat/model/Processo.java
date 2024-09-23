@@ -41,7 +41,7 @@ public class Processo {
     @JoinColumn(name = "setor_id", nullable = true)
     private Setor setor;
 
-    @Column(nullable = true)  // Adiciona o campo para armazenar o nome do arquivo
+    @Column(nullable = false)  // Adiciona o campo para armazenar o nome do arquivo
     private String arquivo;
 
     @PrePersist
