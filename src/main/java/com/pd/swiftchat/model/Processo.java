@@ -47,6 +47,9 @@ public class Processo {
     @Column(nullable = false)  // Adiciona o campo para armazenar o nome do arquivo
     private String arquivo;
 
+    @Column(nullable = true)
+    private String statusProcesso;
+
     @PrePersist
     public void generateNumeroProcesso() {
         if (this.numeroProcesso == null) {
