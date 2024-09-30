@@ -40,9 +40,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/usuarios/register").permitAll()
+                        .requestMatchers("/api/login", "/api/usuarios/register", "/api/setores").permitAll()  // Permitir acesso a /api/setores sem autenticação durante o cadastro
                         .requestMatchers("/api/processos/**").hasAnyAuthority("USUARIO", "FUNCIONARIO")
-                        .requestMatchers("/api/setores/**").hasAuthority("FUNCIONARIO")
+                        .requestMatchers("/api/setores/**").hasAuthority("FUNCIONARIO")  // Bloquear acesso a /api/setores após o login
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandlingConfigurer ->
@@ -53,4 +53,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-

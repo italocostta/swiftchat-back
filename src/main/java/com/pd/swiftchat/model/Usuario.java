@@ -56,6 +56,13 @@ public class Usuario implements UserDetails {
     @Setter
     private int tipoUsuario;  // 1 = Usuario, 2 = Funcionario
 
+    // Adicionando o relacionamento com Setor
+    @ManyToOne
+    @JoinColumn(name = "setor_id")
+    @Getter
+    @Setter
+    private Setor setor;  // Setor ao qual o funcionário pertence (se for funcionário)
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.isUsuarioComum()) {
