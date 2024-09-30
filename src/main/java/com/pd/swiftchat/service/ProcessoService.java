@@ -3,6 +3,7 @@ package com.pd.swiftchat.service;
 import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.Processo;
 import com.pd.swiftchat.model.Setor;
+import com.pd.swiftchat.model.Usuario;
 import com.pd.swiftchat.repository.ProcessoRepository;
 import com.pd.swiftchat.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,13 @@ public class ProcessoService {
     }
 
     // Método que decide se um usuário comum ou funcionário está chamando a listagem de processos
-    public List<Processo> getAllProcessosByRole(UserDetails userDetails) {
-        if (isFuncionario(userDetails)) {
-            // Funcionário pode ver todos os processos
-            return getAllProcessos();
+    public List<Processo> getAllProcessosByRole(Usuario usuarioLogado) {
+        if (usuarioLogado.isFuncionario()) {
+            // Funcionário pode ver os processos de seu setor
+            return getProcessosBySetor(usuarioLogado);
         } else {
             // Usuário comum só pode ver seus próprios processos
-            return getProcessosByUsuario(userDetails);
+            return getProcessosByUsuario(usuarioLogado);
         }
     }
 
@@ -103,4 +104,11 @@ public class ProcessoService {
         return userDetails.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("FUNCIONARIO"));
     }
+
+    // Método para funcionários obterem processos de seu setor
+    public List<Processo> getProcessosBySetor(Usuario funcionario) {
+        Setor setorFuncionario = funcionario.getSetor();
+        return processoRepository.findBySetor(setorFuncionario);
+    }
+
 }

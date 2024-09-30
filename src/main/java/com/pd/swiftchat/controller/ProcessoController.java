@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,9 +35,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProcessoController {
 
-    private static final String UPLOAD_DIR = "uploads/";
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // Limite de 5 MB para arquivos
-
     @Autowired
     private ProcessoService processoService;
 
@@ -55,8 +53,11 @@ public class ProcessoController {
     public ResponseEntity<List<ProcessoDTO>> listarProcessos(@AuthenticationPrincipal UserDetails userDetails) {
         List<Processo> processos;
 
-        // Chama o método adequado de acordo com o tipo de usuário
-        processos = processoService.getAllProcessosByRole(userDetails);
+        // Obter o usuário logado
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Se o usuário logado for um funcionário, filtrar os processos pelo setor dele
+        processos = processoService.getAllProcessosByRole(usuarioLogado);
 
         // Converte a lista de Processos em uma lista de ProcessosDTO
         List<ProcessoDTO> processosDTO = processos.stream().map(processo -> {
