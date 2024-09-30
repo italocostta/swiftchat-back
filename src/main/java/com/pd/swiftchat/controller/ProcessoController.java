@@ -2,10 +2,7 @@ package com.pd.swiftchat.controller;
 
 import com.pd.swiftchat.dto.ProcessoDTO;
 import com.pd.swiftchat.exception.ResourceNotFoundException;
-import com.pd.swiftchat.model.Processo;
-import com.pd.swiftchat.model.Setor;
-import com.pd.swiftchat.model.TipoProcesso;
-import com.pd.swiftchat.model.Usuario;
+import com.pd.swiftchat.model.*;
 import com.pd.swiftchat.repository.UsuarioRepository;
 import com.pd.swiftchat.service.ProcessoService;
 import com.pd.swiftchat.service.SetorService;
@@ -126,6 +123,9 @@ public class ProcessoController {
         Optional<Setor> setorIntermediario = setorService.getSetorByNome("Setor Intermediario");
         if (setorIntermediario.isPresent()) {
             processo.setSetor(setorIntermediario.get());
+            // Atribui o status do processo como RECEBIDO
+            processo.setStatusProcesso("RECEBIDO");
+            System.out.println(processo.getStatusProcesso());
         } else {
             return ResponseEntity.badRequest().body(null);
         }
