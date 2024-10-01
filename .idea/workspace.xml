@@ -6,16 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/TipoUsuario.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/repository/ProcessoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/ProcessoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/ProcessoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/TipoUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/TipoUsuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/Dashboard_Inteligência Empresarial.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/Processo_Financeiro_Improved.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/Processo_Judicial.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/Processo_de_Auditoria_Improved.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/TRABALHO DE HISTORIA.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/relatorio_rabbitmq.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/⚙️ PDist - Prática - Workers, Persistência e Acks - RabbitMQ.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/⚙️ PDist - Prática - Workers, Persistência e Acks - RabbitMQ.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +179,8 @@
       <workItem from="1727114525849" duration="597000" />
       <workItem from="1727121916819" duration="211000" />
       <workItem from="1727122360540" duration="108000" />
-      <workItem from="1727667713543" duration="9004000" />
+      <workItem from="1727667713543" duration="10585000" />
+      <workItem from="1727745179729" duration="16621000" />
     </task>
     <servers />
   </component>

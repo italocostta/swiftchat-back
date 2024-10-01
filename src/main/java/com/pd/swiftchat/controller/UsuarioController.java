@@ -1,12 +1,16 @@
 package com.pd.swiftchat.controller;
 
 import com.pd.swiftchat.exception.CpfCnpjJaUtilizadoException;
+import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.Usuario;
 import com.pd.swiftchat.repository.SetorRepository;
+import com.pd.swiftchat.repository.UsuarioRepository;
 import com.pd.swiftchat.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,28 @@ public class UsuarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
+        String cpfOrCnpj = userDetails.getUsername();
+
+        // Verifica se o identificador é CPF ou CNPJ
+        Optional<Usuario> usuarioOpt;
+        if (cpfOrCnpj.length() == 11) { // CPF
+            usuarioOpt = usuarioRepository.findByCpf(cpfOrCnpj);
+        } else if (cpfOrCnpj.length() == 14) { // CNPJ
+            usuarioOpt = usuarioRepository.findByCnpj(cpfOrCnpj);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Usuario usuario = usuarioOpt.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        return ResponseEntity.ok(usuario);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {

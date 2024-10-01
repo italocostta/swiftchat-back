@@ -11,24 +11,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/api/processos")
@@ -47,125 +46,91 @@ public class ProcessoController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Esse método é compartilhado entre usuário comum e funcionário
+    // Endpoint para avaliar o processo (Deferido ou Indeferido)
+    @Secured("FUNCIONARIO")
+    @PutMapping("/{id}/avaliar")
+    public ResponseEntity<Processo> avaliarProcesso(
+            @PathVariable Long id,
+            @RequestParam String statusProcesso,
+            @RequestParam(required = false) String observacao) {
+        Processo processoAtualizado = processoService.avaliarProcesso(id, statusProcesso, observacao);
+        return ResponseEntity.ok(processoAtualizado);
+    }
+
+    @Secured("FUNCIONARIO")
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Processo> atualizarStatusProcesso(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> statusData) {
+
+        Optional<Processo> processoOptional = processoService.getProcessoById(id);
+
+        if (processoOptional.isPresent()) {
+            Processo processo = processoOptional.get();
+            String status = statusData.get("statusProcesso");
+            String observacao = statusData.get("observacao");
+
+            processo.setStatusProcesso(status);
+            processo.setObservacao(observacao);
+
+            Processo processoAtualizado = processoService.updateProcesso(id, processo);
+            return ResponseEntity.ok(processoAtualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Secured({"USUARIO", "FUNCIONARIO"})
+    @GetMapping("/{id}")
+    public ResponseEntity<ProcessoDTO> obterProcessoPorId(@PathVariable Long id) {
+        return processoService.getProcessoById(id)
+                .map(processo -> ResponseEntity.ok(convertToDTO(processo)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @Secured({"USUARIO", "FUNCIONARIO"})
     @GetMapping
     public ResponseEntity<List<ProcessoDTO>> listarProcessos(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Processo> processos;
+        Usuario usuarioLogado = getUsuarioByUsername(userDetails.getUsername());
+        List<Processo> processos = processoService.getAllProcessosByRole(usuarioLogado);
 
-        // Obter o usuário logado
-        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        // Se o usuário logado for um funcionário, filtrar os processos pelo setor dele
-        processos = processoService.getAllProcessosByRole(usuarioLogado);
-
-        // Converte a lista de Processos em uma lista de ProcessosDTO
-        List<ProcessoDTO> processosDTO = processos.stream().map(processo -> {
-            ProcessoDTO dto = new ProcessoDTO();
-            dto.setId(processo.getId());
-            dto.setNome(processo.getNome());
-            dto.setDescricao(processo.getDescricao());
-            dto.setNumeroProcesso(processo.getNumeroProcesso());
-            dto.setCpf(processo.getCpf());
-            dto.setCnpj(processo.getCnpj());  // Inclui o CNPJ, se existir
-            dto.setTipoPessoa(processo.getTipoPessoa());
-            dto.setTipoProcesso(processo.getTipoProcesso());
-            dto.setSetor(processo.getSetor());
-            dto.setUsuarioNome(processo.getUsuario());
-            dto.setArquivo(processo.getArquivo());  // Inclui o campo arquivo
-            return dto;
-        }).toList();
+        List<ProcessoDTO> processosDTO = processos.stream()
+                .map(this::convertToDTO)
+                .toList();
 
         return ResponseEntity.ok(processosDTO);
     }
 
     @Secured("USUARIO")
     @PostMapping
-    public ResponseEntity<ProcessoDTO> criarProcesso(
+    public ResponseEntity<String> criarProcesso(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestPart("processo") Processo processo,
-            @RequestPart(value = "arquivo", required = false) MultipartFile arquivo
+            @RequestPart(value = "arquivos", required = false) List<MultipartFile> arquivos
     ) throws IOException {
-        System.out.println("Processo recebido: " + processo.getNome());
-        if (arquivo != null) {
-            System.out.println("Arquivo recebido: " + arquivo.getOriginalFilename());
-        } else {
-            System.out.println("Nenhum arquivo recebido");
+        if (arquivos == null || arquivos.isEmpty()) {
+            return ResponseEntity.badRequest().body("Nenhum arquivo foi enviado."); // Rejeita o processo se não houver arquivos
         }
 
         // Obtém o usuário autenticado
-        String cpfOrCnpj = userDetails.getUsername();
-        Optional<Usuario> usuarioOpt;
+        String cpfOuCnpj = userDetails.getUsername(); // Captura o CPF ou CNPJ do usuário logado
 
-        if (cpfOrCnpj.length() == 11) {  // Se for CPF (11 dígitos)
-            usuarioOpt = usuarioRepository.findByCpf(cpfOrCnpj);
-        } else if (cpfOrCnpj.length() == 14) {  // Se for CNPJ (14 dígitos)
-            usuarioOpt = usuarioRepository.findByCnpj(cpfOrCnpj);
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        Usuario usuario = usuarioOpt.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-
-        // Associa automaticamente o usuário autenticado ao processo
-        processo.setUsuario(usuario.getNome());
-
-        // Ajusta o CPF ou CNPJ dependendo do tipo de pessoa
-        if (usuario.getCpf() != null) {
-            processo.setCpf(usuario.getCpf());
-            processo.setTipoPessoa("FISICA");
-        } else if (usuario.getCnpj() != null) {
-            processo.setCpf(null);  // Certifique-se de que o CPF seja nulo
-            processo.setCnpj(usuario.getCnpj());  // Ajusta o CNPJ
-            processo.setTipoPessoa("JURIDICA");
-        }
-
-        // Atribui o processo ao setor intermediário automaticamente
-        Optional<Setor> setorIntermediario = setorService.getSetorByNome("Setor Intermediario");
-        if (setorIntermediario.isPresent()) {
-            processo.setSetor(setorIntermediario.get());
-            // Atribui o status do processo como RECEBIDO
-            processo.setStatusProcesso("RECEBIDO");
-            System.out.println(processo.getStatusProcesso());
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-
-        Optional<TipoProcesso> tipoProcesso = tipoProcessoRepository.findById(processo.getTipoProcesso().getId());
-        if (tipoProcesso.isPresent()) {
-            processo.setTipoProcesso(tipoProcesso.get());
-
-            // Verifica se um arquivo foi enviado e o salva
-            if (arquivo != null && !arquivo.isEmpty()) {
-                String nomeArquivo = salvarArquivo(arquivo);
-                processo.setArquivo(nomeArquivo);  // Aqui, você pode armazenar o nome do arquivo no processo
-            }
-
+        // Salvando arquivos no diretório do usuário
+        for (MultipartFile arquivo : arquivos) {
             try {
-                Processo novoProcesso = processoService.createProcesso(processo);
-
-                // Converte o Processo em ProcessoDTO para retornar uma resposta apropriada
-                ProcessoDTO processoDTO = new ProcessoDTO();
-                processoDTO.setId(novoProcesso.getId());
-                processoDTO.setNome(novoProcesso.getNome());
-                processoDTO.setDescricao(novoProcesso.getDescricao());
-                processoDTO.setNumeroProcesso(novoProcesso.getNumeroProcesso());
-                processoDTO.setCpf(novoProcesso.getCpf());
-                processoDTO.setCnpj(novoProcesso.getCnpj());  // Inclui o CNPJ no DTO
-                processoDTO.setTipoPessoa(novoProcesso.getTipoPessoa());
-                processoDTO.setTipoProcesso(novoProcesso.getTipoProcesso());
-                processoDTO.setSetor(novoProcesso.getSetor());
-                processoDTO.setUsuarioNome(novoProcesso.getUsuario());
-                processoDTO.setArquivo(novoProcesso.getArquivo()); // Inclui o arquivo no DTO
-
-                return ResponseEntity.ok(processoDTO);
+                String nomeArquivo = salvarArquivo(arquivo, cpfOuCnpj); // Passa o arquivo e o CPF/CNPJ
+                processo.getArquivos().add(nomeArquivo);  // Adiciona o arquivo à lista de arquivos do processo
             } catch (RuntimeException e) {
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.badRequest().body("Arquivo duplicado: " + arquivo.getOriginalFilename());
             }
-        } else {
-            return ResponseEntity.badRequest().body(null);
         }
+
+        Processo novoProcesso = processoService.createProcesso(processo);
+        return ResponseEntity.ok("Processo criado com sucesso!");
     }
+
+
+
 
 
     @Secured("FUNCIONARIO")
@@ -185,75 +150,252 @@ public class ProcessoController {
     @Secured("FUNCIONARIO")
     @PutMapping("/{id}/encaminhar")
     public ResponseEntity<Processo> encaminharParaSetorEspecifico(@PathVariable Long id) {
-        Optional<Processo> processoExistente = processoService.getProcessoById(id);
-        if (processoExistente.isPresent()) {
-            Processo processo = processoExistente.get();
-            Setor setorEspecifico = setorService.getSetorPorTipoProcesso(processo.getTipoProcesso());
-            processo.setSetor(setorEspecifico);
-            return ResponseEntity.ok(processoService.updateProcesso(id, processo));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return processoService.getProcessoById(id)
+                .map(processo -> {
+                    Setor setorEspecifico = setorService.getSetorPorTipoProcesso(processo.getTipoProcesso());
+                    processo.setSetor(setorEspecifico);
+                    return ResponseEntity.ok(processoService.updateProcesso(id, processo));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Secured("FUNCIONARIO")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarProcesso(@PathVariable Long id) {
-        if (processoService.getProcessoById(id).isPresent()) {
-            processoService.deleteProcesso(id);
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> deletarProcesso(@PathVariable Long id) {
+        return processoService.getProcessoById(id)
+                .map(processo -> {
+                    processoService.deleteProcesso(id);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Secured({"USUARIO", "FUNCIONARIO"})
+    @GetMapping("/{id}/download")
+    public ResponseEntity<Resource> downloadArquivos(@PathVariable Long id) throws IOException {
+        Optional<Processo> processoOpt = processoService.getProcessoById(id);
+        if (!processoOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Processo processo = processoOpt.get();
+        List<String> arquivos = processo.getArquivos();
+
+        // Criar um arquivo ZIP temporário
+        Path zipPath = Files.createTempFile("arquivos_processo_" + processo.getNumeroProcesso(), ".zip");
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(zipPath))) {
+            for (String arquivo : arquivos) {
+                Path arquivoPath = Paths.get("uploads").resolve(arquivo).toAbsolutePath().normalize();
+                zipOutputStream.putNextEntry(new ZipEntry(arquivo));
+                Files.copy(arquivoPath, zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+        }
+
+        Resource resource = new UrlResource(zipPath.toUri());
+
+        if (resource.exists()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"arquivos_processo_" + processo.getNumeroProcesso() + ".zip\"")
+                    .body(resource);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Secured({"USUARIO", "FUNCIONARIO"})
+    @GetMapping("/{id}/download-todos-arquivos")
+    public ResponseEntity<Resource> downloadTodosArquivos(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<Processo> processoOpt = processoService.getProcessoById(id);
+
+        if (processoOpt.isPresent()) {
+            Processo processo = processoOpt.get();
+
+            // Garantir que os arquivos sejam únicos
+            Set<String> arquivos = new HashSet<>(processo.getArquivos());
+
+            String cpfOuCnpj = processo.getCpf() != null ? processo.getCpf() : processo.getCnpj(); // Obter CPF ou CNPJ do processo
+
+            if (arquivos == null || arquivos.isEmpty()) {
+                return ResponseEntity.badRequest().body(null); // Verifique se há arquivos anexados
+            }
+
+            try {
+                // Caminho temporário para o arquivo ZIP
+                Path zipPath = Files.createTempFile("arquivos_processo_" + processo.getId(), ".zip");
+                System.out.println("Criando ZIP em: " + zipPath.toString()); // Log de depuração
+
+                try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(zipPath))) {
+                    for (String arquivo : arquivos) {
+                        // Caminho completo para os arquivos, usando CPF ou CNPJ
+                        Path filePath = Paths.get("uploads/usuarios").resolve(cpfOuCnpj).resolve(arquivo).toAbsolutePath().normalize();
+                        System.out.println("Adicionando arquivo ao ZIP: " + filePath.toString()); // Log de depuração
+
+                        if (Files.exists(filePath)) {
+                            zos.putNextEntry(new ZipEntry(arquivo));
+                            Files.copy(filePath, zos);
+                            zos.closeEntry();
+                        } else {
+                            System.out.println("Arquivo não encontrado: " + filePath.toString()); // Log de depuração
+                        }
+                    }
+                }
+
+                // Retorna o arquivo ZIP como um recurso
+                Resource resource = new UrlResource(zipPath.toUri());
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"arquivos_processo_" + processo.getId() + ".zip\"")
+                        .body(resource);
+            } catch (IOException e) {
+                e.printStackTrace(); // Adicione o stack trace para capturar o erro
+                throw new RuntimeException("Erro ao criar o arquivo ZIP", e);
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    private String salvarArquivo(MultipartFile arquivo) throws IOException {
-        // Defina o diretório onde os arquivos serão salvos
-        String diretorioUploads = "uploads";  // Apenas "uploads", sem concatenar várias vezes
 
-        // Crie o diretório se ele não existir
+
+
+
+
+
+    private String salvarArquivoParaUsuario(MultipartFile arquivo, Usuario usuario) throws IOException {
+        String diretorioUsuario = "uploads/" + (usuario.getCpf() != null ? usuario.getCpf() : usuario.getCnpj());
+
+        Path caminhoDiretorioUsuario = Paths.get(diretorioUsuario);
+        if (!Files.exists(caminhoDiretorioUsuario)) {
+            Files.createDirectories(caminhoDiretorioUsuario);
+        }
+
+        Path caminhoArquivo = caminhoDiretorioUsuario.resolve(Objects.requireNonNull(arquivo.getOriginalFilename()));
+        Files.copy(arquivo.getInputStream(), caminhoArquivo, StandardCopyOption.REPLACE_EXISTING);
+
+        return caminhoArquivo.getFileName().toString();
+    }
+
+
+
+
+
+    @Secured("USUARIO")
+    @PutMapping("/{id}/anexar")
+    public ResponseEntity<String> anexarArquivos(
+            @PathVariable Long id,
+            @RequestPart(value = "novosArquivos", required = false) List<MultipartFile> novosArquivos,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) throws IOException {
+        Optional<Processo> processoOpt = processoService.getProcessoById(id);
+
+        if (!processoOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Processo processo = processoOpt.get();
+
+        // Obter o usuário autenticado
+        String cpfOuCnpj = userDetails.getUsername(); // Captura o CPF ou CNPJ do usuário logado
+
+        // Verifica se novos arquivos foram anexados
+        if (novosArquivos != null && !novosArquivos.isEmpty()) {
+            for (MultipartFile arquivo : novosArquivos) {
+                try {
+                    // Passa o arquivo e o CPF ou CNPJ do usuário logado
+                    String nomeArquivo = salvarArquivo(arquivo, cpfOuCnpj); // Passa os dois argumentos
+                    processo.getArquivos().add(nomeArquivo);  // Adiciona os novos arquivos à lista de arquivos do processo
+                } catch (RuntimeException e) {
+                    return ResponseEntity.badRequest().body("Arquivo duplicado: " + arquivo.getOriginalFilename());
+                }
+            }
+        }
+
+        // Salva o processo atualizado com os novos arquivos anexados
+        Processo processoAtualizado = processoService.updateProcesso(id, processo);
+        return ResponseEntity.ok("Arquivos anexados com sucesso!");
+    }
+
+
+
+
+
+
+
+
+    // Métodos auxiliares para evitar repetição
+    private String salvarArquivo(MultipartFile arquivo, String cpfOuCnpj) throws IOException {
+        // Definir o diretório com base no CPF ou CNPJ do usuário
+        String diretorioUploads = "uploads/usuarios/" + cpfOuCnpj;
+
+        // Criar o diretório se ele não existir
         Path caminhoDiretorioUploads = Paths.get(diretorioUploads);
         if (!Files.exists(caminhoDiretorioUploads)) {
             Files.createDirectories(caminhoDiretorioUploads);
         }
 
-        // Salve o arquivo no diretório de uploads
+        // Caminho completo do arquivo
         Path caminhoArquivo = caminhoDiretorioUploads.resolve(Objects.requireNonNull(arquivo.getOriginalFilename()));
+
+        // Copiar o arquivo para o diretório
         Files.copy(arquivo.getInputStream(), caminhoArquivo, StandardCopyOption.REPLACE_EXISTING);
 
-        // Retorne o nome do arquivo salvo
-        return arquivo.getOriginalFilename();  // Somente o nome do arquivo, sem o caminho completo
+        // Retorna o nome do arquivo
+        return arquivo.getOriginalFilename();
     }
 
 
-    @Secured({"USUARIO", "FUNCIONARIO"})
-    @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadArquivo(@PathVariable Long id) {
-        Optional<Processo> processoOpt = processoService.getProcessoById(id);
-        if (processoOpt.isPresent()) {
-            Processo processo = processoOpt.get();
-            String nomeArquivo = processo.getArquivo();  // Usando o campo arquivo
 
-            try {
-                // Ajustar o caminho para não duplicar o diretório "uploads"
-                Path filePath = Paths.get("uploads").resolve(nomeArquivo).toAbsolutePath().normalize();
-                System.out.println("Caminho completo do arquivo: " + filePath.toString());
 
-                Resource resource = new UrlResource(filePath.toUri());
 
-                if (resource.exists() && resource.isReadable()) {
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                            .body(resource);
-                } else {
-                    throw new RuntimeException("Arquivo não encontrado ou não é legível.");
-                }
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Erro ao baixar o arquivo: " + e.getMessage());
-            }
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+
+
+
+    private Usuario getUsuarioByUsername(String username) {
+        return username.length() == 11
+                ? usuarioRepository.findByCpf(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"))
+                : usuarioRepository.findByCnpj(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+    }
+
+    private Setor getSetorIntermediario() {
+        return setorService.getSetorByNome("Setor Intermediario")
+                .orElseThrow(() -> new ResourceNotFoundException("Setor Intermediário não encontrado"));
+    }
+
+    private ProcessoDTO convertToDTO(Processo processo) {
+        ProcessoDTO dto = new ProcessoDTO();
+        dto.setId(processo.getId());
+        dto.setNome(processo.getNome());
+        dto.setDescricao(processo.getDescricao());
+        dto.setNumeroProcesso(processo.getNumeroProcesso());
+        dto.setCpf(processo.getCpf());
+        dto.setCnpj(processo.getCnpj());
+        dto.setTipoPessoa(processo.getTipoPessoa());
+        dto.setTipoProcesso(processo.getTipoProcesso());
+        dto.setSetor(processo.getSetor());
+        dto.setUsuarioNome(processo.getUsuario());
+        dto.setArquivo(processo.getArquivo());
+        dto.setStatusProcesso(processo.getStatusProcesso());
+        dto.setObservacao(processo.getObservacao());
+        return dto;
+    }
+
+    private ProcessoDTO mapearParaDTO(Processo processo) {
+        ProcessoDTO dto = new ProcessoDTO();
+        dto.setId(processo.getId());
+        dto.setNome(processo.getNome());
+        dto.setDescricao(processo.getDescricao());
+        dto.setNumeroProcesso(processo.getNumeroProcesso());
+        dto.setCpf(processo.getCpf());
+        dto.setCnpj(processo.getCnpj());
+        dto.setTipoPessoa(processo.getTipoPessoa());
+        dto.setTipoProcesso(processo.getTipoProcesso());
+        dto.setSetor(processo.getSetor());
+        dto.setUsuarioNome(processo.getUsuario());
+        dto.setArquivos(processo.getArquivos());
+        dto.setStatusProcesso(processo.getStatusProcesso());
+        dto.setObservacao(processo.getObservacao());
+        return dto;
     }
 }

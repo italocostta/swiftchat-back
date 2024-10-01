@@ -30,6 +30,22 @@ public class ProcessoService {
         return processoRepository.findAll();
     }
 
+    // Método para atualizar o status do processo
+    public Processo avaliarProcesso(Long id, String statusProcesso, String observacao) {
+        Processo processo = processoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Processo não encontrado"));
+
+        processo.setStatusProcesso(statusProcesso);
+        if ("Indeferido".equalsIgnoreCase(statusProcesso)) {
+            processo.setObservacao(observacao);
+        } else {
+            processo.setObservacao(null);  // Se deferido, limpa a observação
+        }
+
+        return processoRepository.save(processo);
+    }
+
+
     // Método para um usuário comum (física ou jurídica) obter seus próprios processos
     public List<Processo> getProcessosByUsuario(UserDetails userDetails) {
         String cpfOrCnpj = userDetails.getUsername();
