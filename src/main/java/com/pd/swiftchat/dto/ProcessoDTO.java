@@ -3,6 +3,8 @@ package com.pd.swiftchat.dto;
 import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.TipoProcesso;
 
+import java.util.List;
+
 public class ProcessoDTO {
     private Long id;
     private String nome;
@@ -15,8 +17,36 @@ public class ProcessoDTO {
     private Setor setor;
     private String usuarioNome;
     private String arquivo;  // Adicionar campo para o arquivo
+    private String statusProcesso;
+    private String observacao;
+    private List<String> arquivos;
 
     // Getters e Setters
+
+    public List<String> getArquivos() {
+        return arquivos;
+    }
+
+    public void setArquivos(List<String> arquivos) {
+        this.arquivos = arquivos;
+    }
+
+    public String getStatusProcesso() {
+        return statusProcesso;
+    }
+
+    public void setStatusProcesso(String statusProcesso) {
+        this.statusProcesso = statusProcesso;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
     public Long getId() {
         return id;
     }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Entity
@@ -47,8 +49,20 @@ public class Processo {
     @Column(nullable = false)  // Adiciona o campo para armazenar o nome do arquivo
     private String arquivo;
 
-    @Column(nullable = true)
-    private String statusProcesso;
+    @Column(name = "status_processo", nullable = false)
+    private String statusProcesso;  // Status do processo (Deferido, Indeferido)
+
+    @Column(name = "observacao", columnDefinition = "TEXT")
+    private String observacao;  // Observação em caso de indeferimento
+
+    // Armazena os nomes dos arquivos como uma lista
+    @Setter
+    @Getter
+    @ElementCollection
+    @CollectionTable(name = "processo_arquivos", joinColumns = @JoinColumn(name = "processo_id"))
+    @Column(name = "arquivo")
+    private List<String> arquivos = new ArrayList<>();
+
 
     @PrePersist
     public void generateNumeroProcesso() {
@@ -57,5 +71,6 @@ public class Processo {
             this.numeroProcesso = 10000 + random.nextInt(90000);
         }
     }
+
 }
 
