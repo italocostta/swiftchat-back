@@ -6,23 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1ef52aa4-58b9-49e4-baae-d690ed1d1e0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/ProcessoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/controller/UsuarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/ProcessoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/dto/ProcessoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/model/Processo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pd/swiftchat/service/ProcessoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/ProcessoController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/controller/UsuarioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/model/Processo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/pd/swiftchat/service/ProcessoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/Dashboard_Inteligência Empresarial.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/Processo_Financeiro_Improved.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/Processo_Judicial.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/Processo_de_Auditoria_Improved.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/TRABALHO DE HISTORIA.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/relatorio_rabbitmq.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/⚙️ PDist - Prática - Workers, Persistência e Acks - RabbitMQ.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/⚙️ PDist - Prática - Workers, Persistência e Acks - RabbitMQ.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,8 +114,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
       </set>
     </attachedChunks>
   </component>
@@ -181,6 +165,13 @@
       <workItem from="1727122360540" duration="108000" />
       <workItem from="1727667713543" duration="10585000" />
       <workItem from="1727745179729" duration="16621000" />
+      <workItem from="1727762888539" duration="122000" />
+      <workItem from="1727814002490" duration="16000" />
+      <workItem from="1727818427501" duration="154000" />
+      <workItem from="1727818632444" duration="38000" />
+      <workItem from="1727820823418" duration="140000" />
+      <workItem from="1727832412949" duration="839000" />
+      <workItem from="1727908197385" duration="1788000" />
     </task>
     <servers />
   </component>

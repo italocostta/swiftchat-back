@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -126,4 +127,40 @@ public class UsuarioController {
     private boolean validarNome(String nome) {
         return nome.matches("^[A-Z][a-zA-ZÀ-ÿ\\s]+$");  // Nome deve começar com letra maiúscula e conter apenas letras
     }
+
+    @PutMapping("/me/atualizar-nome-sobrenome")
+    public ResponseEntity<Usuario> atualizarNomeSobrenome(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody Map<String, String> atualizacaoDados) {
+
+        String cpfOrCnpj = userDetails.getUsername();
+        Optional<Usuario> usuarioOpt;
+
+        // Busca o usuário pelo CPF ou CNPJ
+        if (cpfOrCnpj.length() == 11) {
+            usuarioOpt = usuarioRepository.findByCpf(cpfOrCnpj);
+        } else if (cpfOrCnpj.length() == 14) {
+            usuarioOpt = usuarioRepository.findByCnpj(cpfOrCnpj);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Usuario usuario = usuarioOpt.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        // Atualiza o nome e sobrenome, caso fornecidos
+        if (atualizacaoDados.containsKey("nome")) {
+            usuario.setNome(atualizacaoDados.get("nome"));
+        }
+
+        if (atualizacaoDados.containsKey("sobrenome")) {
+            usuario.setSobrenome(atualizacaoDados.get("sobrenome"));
+        }
+
+        // Salva as mudanças no banco de dados
+        Usuario usuarioAtualizado = usuarioService.salvar(usuario);
+
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
+
 }
