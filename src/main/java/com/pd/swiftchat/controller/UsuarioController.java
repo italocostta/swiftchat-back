@@ -1,5 +1,6 @@
 package com.pd.swiftchat.controller;
 
+import com.pd.swiftchat.dto.UsuarioUpdateDTO;
 import com.pd.swiftchat.exception.CpfCnpjJaUtilizadoException;
 import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.Setor;
@@ -9,6 +10,7 @@ import com.pd.swiftchat.repository.UsuarioRepository;
 import com.pd.swiftchat.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -125,5 +127,15 @@ public class UsuarioController {
 
     private boolean validarNome(String nome) {
         return nome.matches("^[A-Z][a-zA-ZÀ-ÿ\\s]+$");  // Nome deve começar com letra maiúscula e conter apenas letras
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioUpdateDTO usuarioAtualizado) {
+        Usuario usuario = usuarioService.updateUsuario(id, usuarioAtualizado);
+        if ( usuario != null) {
+            return ResponseEntity.ok(usuario);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
