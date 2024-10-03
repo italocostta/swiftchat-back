@@ -29,13 +29,13 @@ public class Processo {
     @Column(nullable = false)
     private String usuario;
 
-    @Column(nullable = false)  // Permitir nulo, pois será usado para pessoa física
+    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa física
     private String cpf;
 
-    @Column(nullable = false)  // Permitir nulo, pois será usado para pessoa jurídica
-    private String cnpj;  // Novo campo para armazenar o CNPJ de pessoas jurídicas
+    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa jurídica
+    private String cnpj;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String tipoPessoa; // "FISICA" ou "JURIDICA"
 
     @ManyToOne
@@ -46,23 +46,19 @@ public class Processo {
     @JoinColumn(name = "setor_id", nullable = true)
     private Setor setor;
 
-    @Column(nullable = false)  // Adiciona o campo para armazenar o nome do arquivo
+    @Column(nullable = false)
     private String arquivo;
 
     @Column(name = "status_processo", nullable = false)
-    private String statusProcesso;  // Status do processo (Deferido, Indeferido)
+    private String statusProcesso;
 
     @Column(name = "observacao", columnDefinition = "TEXT")
-    private String observacao;  // Observação em caso de indeferimento
+    private String observacao;
 
-    // Armazena os nomes dos arquivos como uma lista
-    @Setter
-    @Getter
     @ElementCollection
     @CollectionTable(name = "processo_arquivos", joinColumns = @JoinColumn(name = "processo_id"))
     @Column(name = "arquivo")
     private List<String> arquivos = new ArrayList<>();
-
 
     @PrePersist
     public void generateNumeroProcesso() {
@@ -71,6 +67,6 @@ public class Processo {
             this.numeroProcesso = 10000 + random.nextInt(90000);
         }
     }
-
 }
+
 

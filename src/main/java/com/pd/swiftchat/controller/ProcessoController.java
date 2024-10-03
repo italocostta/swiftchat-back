@@ -119,28 +119,30 @@ public class ProcessoController {
             @RequestPart(value = "arquivos", required = false) List<MultipartFile> arquivos
     ) throws IOException {
         if (arquivos == null || arquivos.isEmpty()) {
-            return ResponseEntity.badRequest().body("Nenhum arquivo foi enviado."); // Rejeita o processo se não houver arquivos
+            return ResponseEntity.badRequest().body("Nenhum arquivo foi enviado.");
         }
 
         // Obtém o usuário autenticado
-        String cpfOuCnpj = userDetails.getUsername(); // Captura o CPF ou CNPJ do usuário logado
-        Usuario usuarioLogado = getUsuarioByUsername(cpfOuCnpj); // Busca o usuário no banco de dados
+        String cpfOuCnpj = userDetails.getUsername();
+        Usuario usuarioLogado = getUsuarioByUsername(cpfOuCnpj);
 
         // Associa o CPF ou CNPJ ao processo
         if (cpfOuCnpj.length() == 11) {
-            processo.setCpf(cpfOuCnpj); // Se for CPF
+            processo.setCpf(cpfOuCnpj);  // Pessoa física
+            processo.setCnpj(null);
         } else {
-            processo.setCnpj(cpfOuCnpj); // Se for CNPJ
+            processo.setCnpj(cpfOuCnpj);  // Pessoa jurídica
+            processo.setCpf(null);
         }
 
         // Associa o usuário ao processo
-        processo.setUsuario(String.valueOf(usuarioLogado)); // Define o usuário no processo
+        processo.setUsuario(usuarioLogado.getNome());
 
         // Salvando arquivos no diretório do usuário
         for (MultipartFile arquivo : arquivos) {
             try {
-                String nomeArquivo = salvarArquivo(arquivo, cpfOuCnpj); // Passa o arquivo e o CPF/CNPJ
-                processo.getArquivos().add(nomeArquivo);  // Adiciona o arquivo à lista de arquivos do processo
+                String nomeArquivo = salvarArquivo(arquivo, cpfOuCnpj);
+                processo.getArquivos().add(nomeArquivo);
             } catch (RuntimeException e) {
                 return ResponseEntity.badRequest().body("Arquivo duplicado: " + arquivo.getOriginalFilename());
             }
@@ -149,12 +151,6 @@ public class ProcessoController {
         Processo novoProcesso = processoService.createProcesso(processo);
         return ResponseEntity.ok("Processo criado com sucesso!");
     }
-
-
-
-
-
-
 
     @Secured("FUNCIONARIO")
     @PutMapping("/{id}/setor/{setorId}")
