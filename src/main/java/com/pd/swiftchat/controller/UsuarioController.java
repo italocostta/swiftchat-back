@@ -69,7 +69,6 @@ public class UsuarioController {
     @PostMapping("/register")
     public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
 
-
         // Validação de CPF e CNPJ
         if (usuario.getCpf() != null && usuario.getCpf().length() != 11) {
             throw new IllegalArgumentException("O CPF deve conter exatamente 11 dígitos.");
@@ -104,19 +103,25 @@ public class UsuarioController {
             // Usuário pode ser Pessoa Física ou Jurídica
             if (usuario.getCpf() != null) {
                 usuario.setTipoPessoa("FISICA");
+
+                // Validação de nome e sobrenome para Pessoa Física
+                if (!validarNome(usuario.getNome()) || !validarNome(usuario.getSobrenome())) {
+                    throw new IllegalArgumentException("Nome e sobrenome devem conter apenas letras e começar com letra maiúscula.");
+                }
+
             } else if (usuario.getCnpj() != null) {
                 usuario.setTipoPessoa("JURIDICA");
+
+                // Validação apenas do nome para Pessoa Jurídica (sobrenome não é necessário)
+                if (!validarNome(usuario.getNome())) {
+                    throw new IllegalArgumentException("Nome da empresa deve conter apenas letras e começar com letra maiúscula.");
+                }
+
             } else {
                 throw new IllegalArgumentException("Usuário deve ter CPF ou CNPJ.");
             }
         } else {
             throw new IllegalArgumentException("Tipo de usuário inválido.");
-        }
-
-        // Validação de nome e sobrenome
-        if (!validarNome(usuario.getNome()) ||
-                (usuario.getTipoPessoa() != null && usuario.getTipoPessoa().equals("FISICA") && !validarNome(usuario.getSobrenome()))) {
-            throw new IllegalArgumentException("Nome e sobrenome devem conter apenas letras e começar com letra maiúscula.");
         }
 
         // Verificação se já existe um usuário com o mesmo CPF ou CNPJ
@@ -140,6 +145,7 @@ public class UsuarioController {
         usuarioCacheService.invalidateUsuarioCache();
         return ResponseEntity.ok(novoUsuario);
     }
+
 
     private boolean validarNome(String nome) {
         return nome.matches("^[A-Z][a-zA-ZÀ-ÿ\\s]+$");  // Nome deve começar com letra maiúscula e conter apenas letras
