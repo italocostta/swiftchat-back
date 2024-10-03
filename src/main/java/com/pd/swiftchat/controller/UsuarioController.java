@@ -52,6 +52,8 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+
+
     @PostMapping("/register")
     public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
         // Validação de CPF e CNPJ
