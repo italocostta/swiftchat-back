@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/usuarios/register", "/api/setores").permitAll()  // Permitir acesso a /api/setores sem autenticação durante o cadastro
+                        .requestMatchers("/api/login", "/api/usuarios/register", "/api/setores", "/api/processos/mais-criado", "/api/usuarios/count").permitAll()  // Permitir acesso público a /api/processos/mais-criado
                         .requestMatchers("/api/processos/**").hasAnyAuthority("USUARIO", "FUNCIONARIO")
                         .requestMatchers("/api/setores/**").hasAuthority("FUNCIONARIO")  // Bloquear acesso a /api/setores após o login
                         .anyRequest().authenticated()

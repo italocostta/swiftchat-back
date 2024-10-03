@@ -4,6 +4,7 @@ import com.pd.swiftchat.dto.ProcessoDTO;
 import com.pd.swiftchat.exception.ResourceNotFoundException;
 import com.pd.swiftchat.model.*;
 import com.pd.swiftchat.repository.UsuarioRepository;
+import com.pd.swiftchat.service.ProcessoCacheService;
 import com.pd.swiftchat.service.ProcessoService;
 import com.pd.swiftchat.service.SetorService;
 import com.pd.swiftchat.repository.TipoProcessoRepository;
@@ -35,6 +36,9 @@ import java.util.zip.ZipOutputStream;
 public class ProcessoController {
 
     @Autowired
+    private ProcessoCacheService processoCacheService;
+
+    @Autowired
     private ProcessoService processoService;
 
     @Autowired
@@ -45,6 +49,12 @@ public class ProcessoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @GetMapping("/mais-criado")
+    public ResponseEntity<String> getProcessoMaisCriado() {
+        String tipoMaisCriado = processoCacheService.getTipoProcessoMaisCriado();
+        return ResponseEntity.ok(tipoMaisCriado);
+    }
 
     // Endpoint para avaliar o processo (Deferido ou Indeferido)
     @Secured("FUNCIONARIO")

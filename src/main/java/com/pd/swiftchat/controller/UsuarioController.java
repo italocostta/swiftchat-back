@@ -6,6 +6,7 @@ import com.pd.swiftchat.model.Setor;
 import com.pd.swiftchat.model.Usuario;
 import com.pd.swiftchat.repository.SetorRepository;
 import com.pd.swiftchat.repository.UsuarioRepository;
+import com.pd.swiftchat.service.UsuarioCacheService;
 import com.pd.swiftchat.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ import java.util.Optional;
 public class UsuarioController {
 
     @Autowired
+    private UsuarioCacheService usuarioCacheService;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     @Autowired
@@ -32,6 +36,14 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUsuarioCount() {
+        Long count = usuarioCacheService.getUsuariosCount();
+        return ResponseEntity.ok(count);
+    }
 
     @GetMapping("/me")
     public ResponseEntity<Usuario> getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -56,6 +68,8 @@ public class UsuarioController {
 
     @PostMapping("/register")
     public ResponseEntity<Usuario> registerUser(@RequestBody Usuario usuario) {
+
+
         // Validação de CPF e CNPJ
         if (usuario.getCpf() != null && usuario.getCpf().length() != 11) {
             throw new IllegalArgumentException("O CPF deve conter exatamente 11 dígitos.");
@@ -123,6 +137,7 @@ public class UsuarioController {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         Usuario novoUsuario = usuarioService.salvar(usuario);
+        usuarioCacheService.invalidateUsuarioCache();
         return ResponseEntity.ok(novoUsuario);
     }
 
