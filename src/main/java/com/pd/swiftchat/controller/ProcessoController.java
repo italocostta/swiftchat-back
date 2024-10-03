@@ -114,6 +114,17 @@ public class ProcessoController {
 
         // Obtém o usuário autenticado
         String cpfOuCnpj = userDetails.getUsername(); // Captura o CPF ou CNPJ do usuário logado
+        Usuario usuarioLogado = getUsuarioByUsername(cpfOuCnpj); // Busca o usuário no banco de dados
+
+        // Associa o CPF ou CNPJ ao processo
+        if (cpfOuCnpj.length() == 11) {
+            processo.setCpf(cpfOuCnpj); // Se for CPF
+        } else {
+            processo.setCnpj(cpfOuCnpj); // Se for CNPJ
+        }
+
+        // Associa o usuário ao processo
+        processo.setUsuario(String.valueOf(usuarioLogado)); // Define o usuário no processo
 
         // Salvando arquivos no diretório do usuário
         for (MultipartFile arquivo : arquivos) {
@@ -128,6 +139,8 @@ public class ProcessoController {
         Processo novoProcesso = processoService.createProcesso(processo);
         return ResponseEntity.ok("Processo criado com sucesso!");
     }
+
+
 
 
 

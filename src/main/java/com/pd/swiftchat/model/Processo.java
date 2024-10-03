@@ -29,10 +29,10 @@ public class Processo {
     @Column(nullable = false)
     private String usuario;
 
-    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa física
+    @Column(nullable = false)  // Permitir nulo, pois será usado para pessoa física
     private String cpf;
 
-    @Column(nullable = true)  // Permitir nulo, pois será usado para pessoa jurídica
+    @Column(nullable = false)  // Permitir nulo, pois será usado para pessoa jurídica
     private String cnpj;  // Novo campo para armazenar o CNPJ de pessoas jurídicas
 
     @Column(nullable = true)
