@@ -25,9 +25,6 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        System.out.println("Tentativa de login com CPF/CNPJ: " + loginRequest.getCpfCnpj());
-        System.out.println("Senha fornecida: " + loginRequest.getPassword());
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getCpfCnpj(),
@@ -37,13 +34,16 @@ public class LoginController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final Usuario usuario = (Usuario) authentication.getPrincipal();  // Aqui retorna o objeto Usuario
+        final Usuario usuario = (Usuario) authentication.getPrincipal();
         final String token = jwtTokenUtil.generateToken(usuario.getUsername());
 
-        // Verifica o tipo de usuário (FUNCIONARIO ou USUARIO)
         String userType = usuario.isFuncionario() ? "FUNCIONARIO" : "USUARIO";
 
-        // Retorna a resposta com o token, o tipo de usuário e o nome do usuário
-        return ResponseEntity.ok(new JwtResponse(token, userType, usuario.getNome()));
+        // Aqui retorna o nome completo (nome + sobrenome)
+        String nomeCompleto = usuario.getNome() + " " + (usuario.getSobrenome() != null ? usuario.getSobrenome() : "");
+
+        return ResponseEntity.ok(new JwtResponse(token, userType, nomeCompleto));
     }
+
+
 }
