@@ -8,11 +8,11 @@ import com.pd.swiftchat.service.ProcessoCacheService;
 import com.pd.swiftchat.service.ProcessoService;
 import com.pd.swiftchat.service.SetorService;
 import com.pd.swiftchat.repository.TipoProcessoRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -34,6 +34,9 @@ import java.util.zip.ZipOutputStream;
 @RequestMapping("/api/processos")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProcessoController {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private ProcessoCacheService processoCacheService;
@@ -84,6 +87,10 @@ public class ProcessoController {
             processo.setObservacao(observacao);
 
             Processo processoAtualizado = processoService.updateProcesso(id, processo);
+
+            // Invalida o cache após alterar o status do processo
+            processoCacheService.invalidateProcessoCache();
+
             return ResponseEntity.ok(processoAtualizado);
         } else {
             return ResponseEntity.notFound().build();
@@ -149,7 +156,12 @@ public class ProcessoController {
         }
 
         Processo novoProcesso = processoService.createProcesso(processo);
+
+        // Invalida o cache após criar o processo
+        processoCacheService.invalidateProcessoCache();
+
         return ResponseEntity.ok("Processo criado com sucesso!");
+
     }
 
     @Secured("FUNCIONARIO")

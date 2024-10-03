@@ -24,19 +24,16 @@ public class ProcessoCacheService {
         String processoMaisCriado = (String) redisTemplate.opsForValue().get(PROCESSO_MAIS_CRIADO_CACHE_KEY);
 
         if (processoMaisCriado == null) {
-            // Busca o ID do tipo de processo mais criado
             Long tipoProcessoId = processoRepository.findProcessoMaisCriado();
 
-            // Busca o nome do tipo de processo a partir do ID
             if (tipoProcessoId != null) {
                 processoMaisCriado = tipoProcessoRepository.findById(tipoProcessoId)
-                        .map(tipo -> tipo.getNome()) // Supondo que você tenha o método getNome() na entidade TipoProcesso
+                        .map(tipo -> tipo.getNome())
                         .orElse("Desconhecido");
             } else {
                 processoMaisCriado = "Nenhum processo encontrado";
             }
 
-            // Armazena no cache
             redisTemplate.opsForValue().set(PROCESSO_MAIS_CRIADO_CACHE_KEY, processoMaisCriado);
         }
 
